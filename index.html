@@ -125,8 +125,21 @@ section { padding-block: 64px; }
 .grid4 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .tarjeta { background: var(--blanco); box-shadow: var(--sombra); display: flex; flex-direction: column; transition: box-shadow .2s; min-width: 0; }
 .tarjeta:hover { box-shadow: var(--sombra-hover); }
-.tarjeta .icono { height: 120px; display: grid; place-items: center; background: linear-gradient(135deg, #e9f2fa, #d5e6f5); color: var(--azul-hero-2); }
-.tarjeta .icono svg { width: 44px; height: 44px; }
+.tarjeta .foto { position: relative; display: block; padding: 20px 20px 8px; background: linear-gradient(135deg, #e9f2fa, #d5e6f5); overflow: hidden; }
+.tarjeta .foto:hover { text-decoration: none; }
+.tarjeta .foto img { width: 100%; height: auto; aspect-ratio: 800 / 579; object-fit: contain; filter: drop-shadow(0 14px 18px rgba(0, 40, 80, .22)); transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
+.tarjeta .foto:hover img, .tarjeta .foto:focus-visible img { transform: translateY(-6px) scale(1.04) rotate(-1deg); }
+.tarjeta .ver { position: absolute; left: 50%; bottom: 14px; transform: translate(-50%, 8px); display: inline-flex; align-items: center; gap: 6px; background: var(--azul); color: var(--blanco); font-size: 13px; font-weight: 600; padding: 7px 12px; border-radius: var(--r); white-space: nowrap; opacity: 0; transition: opacity .25s, transform .25s; pointer-events: none; }
+.tarjeta .ver::after { content: "↗"; font-weight: 400; }
+.tarjeta .foto:hover .ver, .tarjeta .foto:focus-visible .ver { opacity: 1; transform: translate(-50%, 0); }
+@media (hover: none) { .tarjeta .ver { opacity: 1; transform: translate(-50%, 0); } }
+
+/* Aparición escalonada al hacer scroll (solo si el JS la activa) */
+.revelar .grid4 .tarjeta { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1), box-shadow .2s; }
+.revelar .grid4 .tarjeta img { transform: scale(.9) rotate(-3deg); }
+.revelar .grid4 .tarjeta.visible { opacity: 1; transform: none; }
+.revelar .grid4 .tarjeta.visible img { transform: none; }
+.revelar .grid4 .tarjeta.visible .foto:hover img { transform: translateY(-6px) scale(1.04) rotate(-1deg); }
 .tarjeta .cuerpo { padding: 24px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .tarjeta h3 { font-size: 20px; }
 .tarjeta p { color: var(--grafito); font-size: 14px; }
@@ -301,11 +314,14 @@ footer .copy { margin-left: auto; }
       <div class="cabecera">
         <span class="eyebrow">Para quién</span>
         <h2>Un recorrido para cada tipo de espacio</h2>
-        <p>El tour hace el trabajo de la primera visita: filtra a los curiosos y trae a los interesados con las dudas resueltas.</p>
+        <p>El tour hace el trabajo de la primera visita: filtra a los curiosos y trae a los interesados con las dudas resueltas. Toca una imagen para recorrer un proyecto real, realizado junto a nuestro aliado <a href="https://pixelhunter.pe/virtual-tours/" target="_blank" rel="noopener">Pixel Hunter</a>.</p>
       </div>
       <div class="grid4">
         <article class="tarjeta">
-          <div class="icono"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M8 42V20l16-12 16 12v22z"/><path d="M19 42V30h10v12"/><path d="M4 23 24 8l20 15"/></svg></div>
+          <a class="foto" href="https://tours.pixelhunter.pe/ut3d01/" target="_blank" rel="noopener" aria-label="Ver el tour 360° de Urban Tower 3 (se abre en otra pestaña)">
+            <img src="img/proyectos/ut3.webp" alt="Tour 360° de un departamento de Urban Tower 3 en una tablet" width="800" height="579" loading="lazy" decoding="async" />
+            <span class="ver">Ver tour 360° · Urban Tower 3</span>
+          </a>
           <div class="cuerpo">
             <h3>Inmobiliarias y proyectos</h3>
             <p>Departamentos modelo, casas y proyectos en construcción. Comparte el enlace en portales inmobiliarios y en tus redes.</p>
@@ -313,7 +329,10 @@ footer .copy { margin-left: auto; }
           </div>
         </article>
         <article class="tarjeta">
-          <div class="icono"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M6 32v-6l5-9h26l5 9v6z"/><path d="M6 26h36M11 17l3-6h20l3 6"/><circle cx="14" cy="34" r="4"/><circle cx="34" cy="34" r="4"/></svg></div>
+          <a class="foto" href="https://tours.pixelhunter.pe/bmw01/" target="_blank" rel="noopener" aria-label="Ver el tour 360° de BMW Showroom Perú (se abre en otra pestaña)">
+            <img src="img/proyectos/bmw.webp" alt="Tour 360° del showroom de BMW Perú en una tablet" width="800" height="579" loading="lazy" decoding="async" />
+            <span class="ver">Ver tour 360° · BMW Showroom Perú</span>
+          </a>
           <div class="cuerpo">
             <h3>Concesionarios y showrooms</h3>
             <p>Recorre el salón de ventas y mira cada vehículo por dentro y por fuera. Etiqueta modelos con ficha técnica y precio.</p>
@@ -321,7 +340,10 @@ footer .copy { margin-left: auto; }
           </div>
         </article>
         <article class="tarjeta">
-          <div class="icono"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M6 36h36M8 36V24a4 4 0 0 1 4-4h24a4 4 0 0 1 4 4v12"/><path d="M14 20v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4M8 36v4M40 36v4"/></svg></div>
+          <a class="foto" href="https://tours.pixelhunter.pe/nagoyar/" target="_blank" rel="noopener" aria-label="Ver el tour 360° de Nagoya Restaurant (se abre en otra pestaña)">
+            <img src="img/proyectos/nagoya.webp" alt="Tour 360° del restaurante Nagoya en una tablet" width="800" height="579" loading="lazy" decoding="async" />
+            <span class="ver">Ver tour 360° · Nagoya Restaurant</span>
+          </a>
           <div class="cuerpo">
             <h3>Hoteles, restaurantes y alquileres</h3>
             <p>Habitaciones, salones, terrazas y alojamientos de temporada. El huésped reserva sabiendo lo que va a encontrar.</p>
@@ -329,7 +351,10 @@ footer .copy { margin-left: auto; }
           </div>
         </article>
         <article class="tarjeta">
-          <div class="icono"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M8 42V12h32v30M4 42h40"/><path d="M24 18v10M19 23h10M20 42v-7h8v7"/></svg></div>
+          <a class="foto" href="https://tours.pixelhunter.pe/roepiura/" target="_blank" rel="noopener" aria-label="Ver el tour 360° de ROE Piura (se abre en otra pestaña)">
+            <img src="img/proyectos/roe.webp" alt="Tour 360° de la sede de laboratorios ROE en Piura en una tablet" width="800" height="579" loading="lazy" decoding="async" />
+            <span class="ver">Ver tour 360° · ROE Piura</span>
+          </a>
           <div class="cuerpo">
             <h3>Clínicas y laboratorios</h3>
             <p>El paciente conoce la recepción, los consultorios y los equipos antes de su cita. Transmite orden y confianza.</p>
@@ -337,7 +362,10 @@ footer .copy { margin-left: auto; }
           </div>
         </article>
         <article class="tarjeta">
-          <div class="icono"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M6 20 24 8l18 12"/><path d="M10 20v22M38 20v22M6 42h36M10 26h28"/><path d="M18 42V32h12v10"/></svg></div>
+          <a class="foto" href="https://tours.pixelhunter.pe/casaleguia/" target="_blank" rel="noopener" aria-label="Ver el tour 360° de Casa Leguía (se abre en otra pestaña)">
+            <img src="img/proyectos/casaleguia.webp" alt="Tour 360° del local de eventos Casa Leguía en una tablet" width="800" height="579" loading="lazy" decoding="async" />
+            <span class="ver">Ver tour 360° · Casa Leguía</span>
+          </a>
           <div class="cuerpo">
             <h3>Locales de eventos</h3>
             <p>Salones, jardines y capillas para bodas y eventos. Los novios y organizadores ven el espacio sin moverse de casa.</p>
@@ -345,7 +373,10 @@ footer .copy { margin-left: auto; }
           </div>
         </article>
         <article class="tarjeta">
-          <div class="icono"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M4 42V22l10 6v-6l10 6v-6l10 6V10h10v32z"/><path d="M4 42h40M12 36h4M22 36h4M32 36h4"/></svg></div>
+          <a class="foto" href="https://tours.pixelhunter.pe/cummins01/" target="_blank" rel="noopener" aria-label="Ver el tour 360° de Cummins Perú (se abre en otra pestaña)">
+            <img src="img/proyectos/cummins.webp" alt="Tour 360° de las instalaciones de Cummins Perú en una tablet" width="800" height="579" loading="lazy" decoding="async" />
+            <span class="ver">Ver tour 360° · Cummins Perú</span>
+          </a>
           <div class="cuerpo">
             <h3>Industria, colegios y oficinas</h3>
             <p>Plantas, almacenes, talleres de formación y aulas. Útil para admisiones, inducción de personal y visitas de clientes.</p>
@@ -1145,6 +1176,23 @@ footer .copy { margin-left: auto; }
   document.querySelectorAll('[data-copiar]').forEach(b => b.addEventListener('click', () => copiar(b.dataset.copiar, b, 'Copiar')));
 
   calcular();
+})();
+
+/* Aparición de las tarjetas de proyectos */
+(function () {
+  if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const tarjetas = document.querySelectorAll('.grid4 .tarjeta');
+  document.documentElement.classList.add('revelar');
+  tarjetas.forEach((t, i) => { t.style.transitionDelay = (i % 3) * 120 + 'ms'; });
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('visible');
+    io.unobserve(e.target);
+    setTimeout(() => { e.target.style.transitionDelay = ''; }, 1200);
+  }), { rootMargin: '0px 0px -10% 0px' });
+  tarjetas.forEach(t => io.observe(t));
+  // por si el observador no dispara (pestaña en segundo plano, capturas)
+  setTimeout(() => tarjetas.forEach(t => t.classList.add('visible')), 4000);
 })();
 
 /* Volver al principio */
