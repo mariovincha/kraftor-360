@@ -125,21 +125,27 @@ section { padding-block: 64px; }
 .grid4 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .tarjeta { background: var(--blanco); box-shadow: var(--sombra); display: flex; flex-direction: column; transition: box-shadow .2s; min-width: 0; }
 .tarjeta:hover { box-shadow: var(--sombra-hover); }
-.tarjeta .foto { position: relative; display: block; padding: 20px 20px 8px; background: linear-gradient(135deg, #e9f2fa, #d5e6f5); overflow: hidden; }
+/* Foto de proyecto con los controles del visor de la portada */
+.tarjeta .foto { position: relative; display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--azul-hero-2); color: var(--blanco); }
 .tarjeta .foto:hover { text-decoration: none; }
-.tarjeta .foto img { width: 100%; height: auto; aspect-ratio: 800 / 579; object-fit: contain; filter: drop-shadow(0 14px 18px rgba(0, 40, 80, .22)); transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
-.tarjeta .foto:hover img, .tarjeta .foto:focus-visible img { transform: translateY(-6px) scale(1.04) rotate(-1deg); }
-.tarjeta .ver { position: absolute; left: 50%; bottom: 14px; transform: translate(-50%, 8px); display: inline-flex; align-items: center; gap: 6px; background: var(--azul); color: var(--blanco); font-size: 13px; font-weight: 600; padding: 7px 12px; border-radius: var(--r); white-space: nowrap; opacity: 0; transition: opacity .25s, transform .25s; pointer-events: none; }
-.tarjeta .ver::after { content: "↗"; font-weight: 400; }
-.tarjeta .foto:hover .ver, .tarjeta .foto:focus-visible .ver { opacity: 1; transform: translate(-50%, 0); }
-@media (hover: none) { .tarjeta .ver { opacity: 1; transform: translate(-50%, 0); } }
+.tarjeta .foto img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); transition: transform .9s cubic-bezier(.2, .7, .2, 1); }
+.tarjeta .foto:hover img, .tarjeta .foto:focus-visible img { animation: mirar 7s ease-in-out infinite alternate; }
+@keyframes mirar { from { transform: scale(1.12) translateX(4.5%); } to { transform: scale(1.12) translateX(-4.5%); } }
+.tarjeta .foto .sello, .tarjeta .foto .nombre, .tarjeta .foto .ver { position: absolute; font-size: 12px; font-weight: 600; line-height: 1; padding: 6px 9px; border-radius: var(--r); white-space: nowrap; pointer-events: none; }
+.tarjeta .foto .sello { left: 12px; top: 12px; background: var(--azul); letter-spacing: .02em; }
+.tarjeta .foto .nombre { right: 12px; top: 12px; background: rgba(0, 0, 0, .62); font-weight: 400; max-width: calc(100% - 90px); overflow: hidden; text-overflow: ellipsis; }
+.tarjeta .foto .ver { left: 50%; bottom: 12px; transform: translateX(-50%); background: rgba(0, 0, 0, .62); transition: background .25s; }
+.tarjeta .foto:hover .ver, .tarjeta .foto:focus-visible .ver { background: var(--azul); }
+.tarjeta .foto .punto { position: absolute; left: var(--x); top: var(--y); width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; border: 2px solid var(--blanco); background: rgba(0, 103, 184, .85); animation: latido 2.4s infinite; pointer-events: none; }
+.tarjeta .foto .punto::after { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: var(--blanco); }
 
 /* Aparición escalonada al hacer scroll (solo si el JS la activa) */
 .revelar .grid4 .tarjeta { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1), box-shadow .2s; }
-.revelar .grid4 .tarjeta img { transform: scale(.9) rotate(-3deg); }
+.revelar .grid4 .tarjeta img { transform: scale(1.3); }
+.revelar .grid4 .tarjeta .foto > span { opacity: 0; transition: opacity .5s ease .5s, background .25s; }
 .revelar .grid4 .tarjeta.visible { opacity: 1; transform: none; }
-.revelar .grid4 .tarjeta.visible img { transform: none; }
-.revelar .grid4 .tarjeta.visible .foto:hover img { transform: translateY(-6px) scale(1.04) rotate(-1deg); }
+.revelar .grid4 .tarjeta.visible img { transform: scale(1.12); }
+.revelar .grid4 .tarjeta.visible .foto > span { opacity: 1; }
 .tarjeta .cuerpo { padding: 24px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .tarjeta h3 { font-size: 20px; }
 .tarjeta p { color: var(--grafito); font-size: 14px; }
@@ -319,8 +325,11 @@ footer .copy { margin-left: auto; }
       <div class="grid4">
         <article class="tarjeta">
           <a class="foto" href="https://tours.pixelhunter.pe/ut3d01/" target="_blank" rel="noopener" aria-label="Ver el tour 360° de Urban Tower 3 (se abre en otra pestaña)">
-            <img src="img/proyectos/ut3.webp" alt="Tour 360° de un departamento de Urban Tower 3 en una tablet" width="800" height="579" loading="lazy" decoding="async" />
-            <span class="ver">Ver tour 360° · Urban Tower 3</span>
+            <img src="img/proyectos/ut3.webp" alt="Tour 360° de un departamento de Urban Tower 3" width="800" height="500" loading="lazy" decoding="async" />
+            <span class="sello">360°</span>
+            <span class="nombre">Urban Tower 3</span>
+            <span class="punto" style="--x:38%;--y:42%" aria-hidden="true"></span>
+            <span class="ver">↔ Ver tour 360°</span>
           </a>
           <div class="cuerpo">
             <h3>Inmobiliarias y proyectos</h3>
@@ -330,8 +339,11 @@ footer .copy { margin-left: auto; }
         </article>
         <article class="tarjeta">
           <a class="foto" href="https://tours.pixelhunter.pe/bmw01/" target="_blank" rel="noopener" aria-label="Ver el tour 360° de BMW Showroom Perú (se abre en otra pestaña)">
-            <img src="img/proyectos/bmw.webp" alt="Tour 360° del showroom de BMW Perú en una tablet" width="800" height="579" loading="lazy" decoding="async" />
-            <span class="ver">Ver tour 360° · BMW Showroom Perú</span>
+            <img src="img/proyectos/bmw.webp" alt="Tour 360° del showroom de BMW Perú" width="800" height="500" loading="lazy" decoding="async" />
+            <span class="sello">360°</span>
+            <span class="nombre">BMW Showroom Perú</span>
+            <span class="punto" style="--x:42%;--y:52%" aria-hidden="true"></span>
+            <span class="ver">↔ Ver tour 360°</span>
           </a>
           <div class="cuerpo">
             <h3>Concesionarios y showrooms</h3>
@@ -341,8 +353,11 @@ footer .copy { margin-left: auto; }
         </article>
         <article class="tarjeta">
           <a class="foto" href="https://tours.pixelhunter.pe/nagoyar/" target="_blank" rel="noopener" aria-label="Ver el tour 360° de Nagoya Restaurant (se abre en otra pestaña)">
-            <img src="img/proyectos/nagoya.webp" alt="Tour 360° del restaurante Nagoya en una tablet" width="800" height="579" loading="lazy" decoding="async" />
-            <span class="ver">Ver tour 360° · Nagoya Restaurant</span>
+            <img src="img/proyectos/nagoya.webp" alt="Tour 360° del restaurante Nagoya" width="800" height="500" loading="lazy" decoding="async" />
+            <span class="sello">360°</span>
+            <span class="nombre">Nagoya Restaurant</span>
+            <span class="punto" style="--x:58%;--y:34%" aria-hidden="true"></span>
+            <span class="ver">↔ Ver tour 360°</span>
           </a>
           <div class="cuerpo">
             <h3>Hoteles, restaurantes y alquileres</h3>
@@ -352,8 +367,11 @@ footer .copy { margin-left: auto; }
         </article>
         <article class="tarjeta">
           <a class="foto" href="https://tours.pixelhunter.pe/roepiura/" target="_blank" rel="noopener" aria-label="Ver el tour 360° de ROE Piura (se abre en otra pestaña)">
-            <img src="img/proyectos/roe.webp" alt="Tour 360° de la sede de laboratorios ROE en Piura en una tablet" width="800" height="579" loading="lazy" decoding="async" />
-            <span class="ver">Ver tour 360° · ROE Piura</span>
+            <img src="img/proyectos/roe.webp" alt="Tour 360° de la sede de laboratorios ROE en Piura" width="800" height="500" loading="lazy" decoding="async" />
+            <span class="sello">360°</span>
+            <span class="nombre">ROE Piura</span>
+            <span class="punto" style="--x:24%;--y:42%" aria-hidden="true"></span>
+            <span class="ver">↔ Ver tour 360°</span>
           </a>
           <div class="cuerpo">
             <h3>Clínicas y laboratorios</h3>
@@ -363,8 +381,11 @@ footer .copy { margin-left: auto; }
         </article>
         <article class="tarjeta">
           <a class="foto" href="https://tours.pixelhunter.pe/casaleguia/" target="_blank" rel="noopener" aria-label="Ver el tour 360° de Casa Leguía (se abre en otra pestaña)">
-            <img src="img/proyectos/casaleguia.webp" alt="Tour 360° del local de eventos Casa Leguía en una tablet" width="800" height="579" loading="lazy" decoding="async" />
-            <span class="ver">Ver tour 360° · Casa Leguía</span>
+            <img src="img/proyectos/casaleguia.webp" alt="Tour 360° del local de eventos Casa Leguía" width="800" height="500" loading="lazy" decoding="async" />
+            <span class="sello">360°</span>
+            <span class="nombre">Casa Leguía</span>
+            <span class="punto" style="--x:44%;--y:62%" aria-hidden="true"></span>
+            <span class="ver">↔ Ver tour 360°</span>
           </a>
           <div class="cuerpo">
             <h3>Locales de eventos</h3>
@@ -374,8 +395,11 @@ footer .copy { margin-left: auto; }
         </article>
         <article class="tarjeta">
           <a class="foto" href="https://tours.pixelhunter.pe/cummins01/" target="_blank" rel="noopener" aria-label="Ver el tour 360° de Cummins Perú (se abre en otra pestaña)">
-            <img src="img/proyectos/cummins.webp" alt="Tour 360° de las instalaciones de Cummins Perú en una tablet" width="800" height="579" loading="lazy" decoding="async" />
-            <span class="ver">Ver tour 360° · Cummins Perú</span>
+            <img src="img/proyectos/cummins.webp" alt="Tour 360° de las instalaciones de Cummins Perú" width="800" height="500" loading="lazy" decoding="async" />
+            <span class="sello">360°</span>
+            <span class="nombre">Cummins Perú</span>
+            <span class="punto" style="--x:66%;--y:40%" aria-hidden="true"></span>
+            <span class="ver">↔ Ver tour 360°</span>
           </a>
           <div class="cuerpo">
             <h3>Industria, colegios y oficinas</h3>
