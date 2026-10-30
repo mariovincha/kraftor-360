@@ -214,6 +214,9 @@ section { padding-block: 64px; }
 .extras label { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; cursor: pointer; }
 .extras input { accent-color: var(--azul); margin: 3px 0 0; }
 .extras small { color: var(--acero); display: block; }
+.ciudad { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; font-size: 14px; }
+.ciudad input { font: inherit; padding: 8px 10px; border: 1px solid var(--acero); border-radius: var(--r); max-width: 260px; }
+.ciudad small { color: var(--acero); font-size: 13px; }
 .cot-res { background: linear-gradient(135deg, var(--azul-hero), var(--azul-hero-2)); color: var(--blanco); padding: 32px; display: flex; flex-direction: column; gap: 24px; min-width: 0; }
 .cot-res h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; color: rgba(255, 255, 255, .8); }
 .cifras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -238,6 +241,25 @@ section { padding-block: 64px; }
 .faq summary::after { content: ""; position: absolute; right: 8px; top: 24px; width: 8px; height: 8px; border-right: 2px solid var(--negro); border-bottom: 2px solid var(--negro); transform: rotate(45deg); transition: transform .2s; }
 .faq details[open] summary::after { transform: rotate(-135deg); top: 28px; }
 .faq details p { padding: 0 40px 20px 0; color: var(--grafito); max-width: 68ch; }
+
+/* Celular con un tour que gira solo, junto a las preguntas */
+.faq-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 64px; align-items: start; }
+.faq-grid .faq { max-width: none; min-width: 0; }
+.celular { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.cel-marco { display: block; width: 280px; max-width: 100%; aspect-ratio: 9 / 19; padding: 10px; border-radius: 46px; background: #121314; box-shadow: inset 0 0 0 2px #3a3d41, var(--sombra-hover); transition: transform .4s cubic-bezier(.2, .7, .2, 1); }
+.cel-marco:hover { transform: translateY(-6px); text-decoration: none; }
+.cel-pantalla { position: relative; display: block; width: 100%; height: 100%; border-radius: 36px; overflow: hidden; background: var(--azul-hero-2); color: var(--blanco); }
+.cel-escena { position: absolute; top: 0; left: 0; height: 100%; aspect-ratio: 1000 / 704; transform: translateX(-12%); animation: girar 16s ease-in-out infinite alternate; }
+.cel-escena img { width: 100%; height: 100%; display: block; }
+@keyframes girar { from { transform: translateX(-12%); } to { transform: translateX(-58%); } }
+.cel-isla { position: absolute; top: 10px; left: 50%; width: 84px; height: 24px; margin-left: -42px; border-radius: 12px; background: #121314; }
+.celular .sello { position: absolute; left: 14px; top: 44px; background: var(--azul); font-size: 12px; font-weight: 600; line-height: 1; padding: 6px 9px; border-radius: var(--r); }
+.celular .punto { position: absolute; left: var(--x); top: var(--y); width: 24px; height: 24px; margin: -12px 0 0 -12px; border-radius: 50%; border: 2px solid var(--blanco); background: rgba(0, 103, 184, .85); animation: latido 2.4s infinite; }
+.celular .punto::after { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: var(--blanco); }
+.cel-pista { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 6px; background: rgba(0, 0, 0, .62); font-size: 12px; padding: 7px 11px; border-radius: var(--r); white-space: nowrap; }
+.cel-pista svg { width: 16px; height: 16px; flex: none; }
+.celular figcaption { font-size: 13px; color: var(--acero); text-align: center; }
+@media (max-width: 900px) { .faq-grid { grid-template-columns: 1fr; gap: 48px; } .cel-marco { width: 240px; } }
 
 /* Banda final */
 .banda { background: linear-gradient(135deg, var(--azul-hero), var(--azul-hero-2)); color: var(--blanco); }
@@ -277,7 +299,7 @@ footer .copy { margin-left: auto; }
       <li><a href="#usos">Para quién</a></li>
       <li><a href="#incluye">Qué incluye</a></li>
       <li><a href="#proceso">Cómo trabajamos</a></li>
-      <li><a href="#planes">Planes</a></li>
+      <li hidden><a href="#planes">Planes</a></li>
       <li><a href="#preguntas">Preguntas</a></li>
     </ul>
     <a class="btn" href="#cotizar">Cotizar mi tour</a>
@@ -308,7 +330,7 @@ footer .copy { margin-left: auto; }
         <div class="acciones">
           <a class="btn" href="#cotizar">Calcular mi tour
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a class="link" href="#planes">Ver planes</a>
+          <a class="link" href="#usos">Ver proyectos</a>
         </div>
       </div>
     </div>
@@ -448,7 +470,7 @@ footer .copy { margin-left: auto; }
         </ul>
         <aside class="ficha" aria-label="Ficha técnica de entrega">
           <h3>Ficha técnica de entrega</h3>
-          <p>Valores del plan Profesional.</p>
+          <p>Valores de referencia para un tour de tamaño medio.</p>
           <dl>
             <dt>Resolución por escena</dt><dd>8K equirectangular (7680 × 3840 px)</dd>
             <dt>Escenas</dt><dd>Hasta 25</dd>
@@ -497,7 +519,7 @@ footer .copy { margin-left: auto; }
   </section>
 
   <!-- ===== Planes ===== -->
-  <section id="planes">
+  <section id="planes" hidden>
     <div class="wrap">
       <div class="cabecera">
         <span class="eyebrow">Planes</span>
@@ -581,8 +603,18 @@ footer .copy { margin-left: auto; }
             <legend>Extras</legend>
             <div class="extras">
               <label><input type="checkbox" id="x-plano" /> <span>Plano interactivo <small>Para que se ubiquen dentro del espacio</small></span></label>
-              <label><input type="checkbox" id="x-maps" /> <span>Publicación en Google Maps <small>Tu negocio con recorrido dentro de la ficha de Maps</small></span></label>
-              <label><input type="checkbox" id="x-video" /> <span>Video recorrido para redes <small>Clip vertical de 30 s armado desde el tour</small></span></label>
+            </div>
+          </fieldset>
+          <fieldset class="campo">
+            <legend>Ubicación del espacio</legend>
+            <div class="opciones">
+              <label><input type="radio" name="ubicacion" id="u-lima" value="lima" checked /> Lima</label>
+              <label><input type="radio" name="ubicacion" id="u-provincia" value="provincia" /> Provincia</label>
+            </div>
+            <div class="ciudad" id="ciudadCampo" hidden>
+              <label for="ciudad">¿En qué ciudad?</label>
+              <input type="text" id="ciudad" placeholder="Arequipa" autocomplete="address-level2" />
+              <small>Sumamos el traslado a la cotización.</small>
             </div>
           </fieldset>
         </form>
@@ -593,7 +625,7 @@ footer .copy { margin-left: auto; }
             <div class="cifra"><b id="rHoras">2</b><span>horas de captura</span></div>
             <div class="cifra"><b id="rDias">5</b><span>días hábiles de entrega</span></div>
           </div>
-          <div class="recomienda" id="rPlan">Te recomendamos el plan <strong>Profesional</strong>.</div>
+          <div class="recomienda" id="rPlan" hidden>Te recomendamos el plan <strong>Profesional</strong>.</div>
           <div class="mensaje" id="rMensaje"></div>
           <div class="acciones">
             <a class="btn" id="rWhats" href="https://wa.me/51958317484" target="_blank" rel="noopener">
@@ -614,6 +646,7 @@ footer .copy { margin-left: auto; }
         <span class="eyebrow">Preguntas frecuentes</span>
         <h2>Lo que nos suelen preguntar</h2>
       </div>
+      <div class="faq-grid">
       <div class="faq">
         <details open>
           <summary>¿En qué se diferencia de un video o de unas fotos?</summary>
@@ -639,6 +672,25 @@ footer .copy { margin-left: auto; }
           <summary>¿Trabajan fuera de Lima?</summary>
           <p>Sí. Coordinamos la fecha de captura y sumamos a la cotización el traslado.</p>
         </details>
+      </div>
+      <figure class="celular">
+        <a class="cel-marco" href="https://tours.pixelhunter.pe/casaleguia/" target="_blank" rel="noopener" aria-label="Ver el tour 360° de Casa Leguía en el celular (se abre en otra pestaña)">
+          <span class="cel-pantalla">
+            <span class="cel-escena">
+              <img src="img/proyectos/casaleguia-360.webp" alt="Tour 360° de la piscina con vista al mar de Casa Leguía, visto en un celular" width="1000" height="704" loading="lazy" decoding="async" />
+              <span class="punto" style="--x:47%;--y:72%" aria-hidden="true"></span>
+              <span class="punto" style="--x:79%;--y:40%" aria-hidden="true"></span>
+            </span>
+            <span class="cel-isla" aria-hidden="true"></span>
+            <span class="sello">360°</span>
+            <span class="cel-pista">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M3 9c-1 2-1 4 0 6M21 9c1 2 1 4 0 6"/></svg>
+              Mueve el celular para mirar
+            </span>
+          </span>
+        </a>
+        <figcaption>Casa Leguía · <a href="https://tours.pixelhunter.pe/casaleguia/" target="_blank" rel="noopener">Ábrelo en tu celular</a></figcaption>
+      </figure>
       </div>
     </div>
   </section>
@@ -1153,34 +1205,37 @@ footer .copy { margin-left: auto; }
     let dias = escenas <= 15 ? 5 : escenas <= 40 ? 7 : 10;
     const extras = [];
     if ($('x-plano').checked) extras.push('plano interactivo');
-    if ($('x-maps').checked) { extras.push('publicación en Google Maps'); dias += 2; }
-    if ($('x-video').checked) { extras.push('video para redes'); dias += 1; }
-    const plan = escenas <= 8 && !$('x-plano').checked && !$('x-maps').checked ? 'Esencial' : escenas <= 25 && !$('x-maps').checked ? 'Profesional' : 'Proyecto';
+    const provincia = $('u-provincia').checked;
+    $('ciudadCampo').hidden = !provincia;
+    const ciudad = $('ciudad').value.trim();
+    if (provincia) dias += 2;
+    const plan = escenas <= 8 && !$('x-plano').checked ? 'Esencial' : escenas <= 25 ? 'Profesional' : 'Proyecto';
 
     $('rEscenas').textContent = escenas;
     $('rHoras').textContent = horas;
     $('rDias').textContent = dias;
     $('rPlan').innerHTML = `Te recomendamos el plan <strong>${plan}</strong>.`;
-    texto = `Hola Kraftor, quiero cotizar un tour virtual 360°.\n• Espacio: ${TIPOS[tipo].nombre}, ${area} m²\n• Estimado: ${escenas} escenas, plan ${plan}` + (extras.length ? `\n• Extras: ${extras.join(', ')}` : '');
+    texto = `Hola Kraftor, quiero cotizar un tour virtual 360°.\n• Espacio: ${TIPOS[tipo].nombre}, ${area} m²\n• Ubicación: ${provincia ? 'provincia' + (ciudad ? ` (${ciudad})` : '') : 'Lima'}\n• Estimado: ${escenas} escenas` + (extras.length ? `\n• Extras: ${extras.join(', ')}` : '');
     $('rMensaje').textContent = texto;
     $('rWhats').href = 'https://wa.me/51958317484?text=' + encodeURIComponent(texto);
   }
   rango.addEventListener('input', () => { num.value = rango.value; calcular(); });
   num.addEventListener('input', () => { rango.value = Math.min(3000, Math.max(30, num.value || 30)); calcular(); });
   $('cotForm').addEventListener('change', calcular);
+  $('ciudad').addEventListener('input', calcular);
   $('cotForm').addEventListener('submit', e => e.preventDefault());
 
   // los botones de cada plan precargan un caso típico
   const PRESET = {
     esencial: ['vivienda', 90, []],
     profesional: ['hotel', 400, ['x-plano']],
-    proyecto: ['inst', 1500, ['x-plano', 'x-maps']]
+    proyecto: ['inst', 1500, ['x-plano']]
   };
   document.querySelectorAll('[data-plan]').forEach(a => a.addEventListener('click', () => {
     const [tipo, area, ext] = PRESET[a.dataset.plan];
     document.querySelector(`input[name="tipo"][value="${tipo}"]`).checked = true;
     num.value = rango.value = area;
-    ['x-plano', 'x-maps', 'x-video'].forEach(id => { $(id).checked = ext.includes(id); });
+    $('x-plano').checked = ext.includes('x-plano');
     calcular();
   }));
 
