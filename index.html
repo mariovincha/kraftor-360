@@ -1,0 +1,1159 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Kraftor Tours 360°</title>
+<meta name="claude:viewport-fit-sides" content="cover" />
+<meta name="description" content="Tours virtuales 360° para inmobiliarias, hoteles, tiendas, colegios y oficinas. Kraftor, Lima." />
+<link rel="icon" href="img/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" />
+<style>
+/* =========================================================
+   KRAFTOR · TOURS VIRTUALES 360°
+   Estilo kraftor.com (guía Microsoft): lienzo blanco, un solo azul
+   de acción, Segoe UI 400/600, radios de 2px, sombra solo en tarjetas.
+   Layout: héroe a todo el ancho con un visor 360° real que se arrastra,
+   tarjeta blanca encima a la izquierda; luego bandas blanco / niebla.
+   Tema único claro, a propósito (así es la marca).
+   ========================================================= */
+:root {
+  --azul: #0067b8;          /* único color de acción */
+  --azul-oscuro: #005a9e;
+  --azul-hero: #0050a0;
+  --azul-hero-2: #003a75;
+  --blanco: #ffffff;
+  --niebla: #f2f2f2;
+  --negro: #000000;
+  --acero: #616161;
+  --grafito: #262626;
+  --linea: rgba(0, 0, 0, .12);
+  --fuente: "Segoe UI", "Segoe UI Web (West European)", "Open Sans", system-ui, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --sombra: rgba(0, 0, 0, .13) 0 3px 7px 0, rgba(0, 0, 0, .11) 0 1px 2px 0;
+  --sombra-hover: rgba(0, 0, 0, .18) 0 8px 18px 0, rgba(0, 0, 0, .12) 0 2px 4px 0;
+  --r: 2px;
+  --max: 1200px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body { margin: 0; font-family: var(--fuente); font-size: 15px; line-height: 1.5; color: var(--negro); background: var(--blanco); -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+a { color: var(--azul); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1, h2, h3, h4 { font-weight: 600; margin: 0; line-height: 1.2; text-wrap: balance; }
+p { margin: 0; }
+.wrap { max-width: var(--max); margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:focus-visible { outline: 2px solid var(--negro); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+
+/* ---------- Botones ---------- */
+.btn { display: inline-flex; align-items: center; gap: 8px; background: var(--azul); color: var(--blanco); font: 600 15px/1 var(--fuente); padding: 12px 16px; border: 0; border-radius: var(--r); cursor: pointer; white-space: nowrap; }
+.btn:hover { background: var(--azul-oscuro); text-decoration: none; }
+.btn svg { width: 16px; height: 16px; flex: none; }
+.link { display: inline-flex; align-items: center; gap: 6px; }
+.link::after { content: "›"; font-size: 20px; line-height: 1; transform: translateY(-1px); }
+
+/* ---------- Navegación ---------- */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--blanco); }
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: var(--blanco); box-shadow: 0 1px 0 var(--linea); }
+.nav .wrap { display: flex; align-items: center; height: 60px; gap: 24px; }
+.logo { display: flex; align-items: center; gap: 10px; color: var(--negro); flex: none; }
+.logo:hover { text-decoration: none; }
+.logo img { height: 34px; width: auto; }
+.logo .sello { font-size: 13px; color: var(--acero); border-left: 1px solid var(--linea); padding-left: 10px; line-height: 1.2; }
+.nav ul { display: flex; gap: 4px; list-style: none; margin: 0 0 0 8px; padding: 0; }
+.nav ul a { display: block; color: var(--grafito); font-size: 14px; padding: 8px; }
+.nav .btn { margin-left: auto; padding: 10px 14px; font-size: 14px; }
+@media (max-width: 900px) { .nav ul { display: none; } }
+@media (max-width: 420px) { .logo .sello { display: none; } }
+
+/* ---------- Héroe con visor 360 ---------- */
+.hero { position: relative; height: 600px; background: linear-gradient(135deg, var(--azul-hero), var(--azul-hero-2)); overflow: hidden; }
+#visor { position: absolute; inset: 0; cursor: grab; touch-action: none; outline: none; }
+#visor.arrastrando { cursor: grabbing; }
+#visor canvas { display: block; width: 100%; height: 100%; }
+.hero .wrap { position: relative; height: 100%; pointer-events: none; }
+.hero-card { position: absolute; left: max(24px, env(safe-area-inset-left, 0px)); top: 48px; width: 420px; max-width: calc(100% - 48px); background: var(--blanco); padding: 40px; pointer-events: auto; display: flex; flex-direction: column; gap: 16px; }
+.eyebrow { font-size: 13px; font-weight: 600; color: var(--azul); text-transform: uppercase; letter-spacing: .06em; }
+.hero-card h1 { font-size: 37px; }
+.hero-card p { color: var(--grafito); }
+.hero-card .acciones { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-top: 8px; }
+
+.pista { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; background: rgba(0, 0, 0, .62); color: var(--blanco); font-size: 13px; padding: 8px 14px; border-radius: var(--r); pointer-events: none; transition: opacity .4s; white-space: nowrap; }
+.pista svg { width: 18px; height: 18px; }
+.pista.oculta { opacity: 0; }
+.controles { position: absolute; right: max(24px, env(safe-area-inset-right, 0px)); bottom: 24px; display: flex; flex-direction: column; gap: 1px; background: var(--linea); box-shadow: var(--sombra); pointer-events: auto; }
+.controles button { width: 40px; height: 40px; display: grid; place-items: center; background: var(--blanco); border: 0; cursor: pointer; color: var(--negro); }
+.controles button:hover { background: var(--niebla); }
+.controles svg { width: 18px; height: 18px; }
+.escena-tag { position: absolute; right: max(24px, env(safe-area-inset-right, 0px)); top: 24px; background: rgba(0, 0, 0, .62); color: var(--blanco); font-size: 13px; padding: 6px 12px; border-radius: var(--r); pointer-events: none; font-variant-numeric: tabular-nums; }
+
+.hotspot { position: absolute; left: 0; top: 0; width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; border: 2px solid var(--blanco); background: rgba(0, 103, 184, .85); color: var(--blanco); display: grid; place-items: center; cursor: pointer; padding: 0; box-shadow: 0 0 0 0 rgba(255, 255, 255, .6); animation: latido 2.4s infinite; will-change: transform; }
+.hotspot svg { width: 16px; height: 16px; }
+.hotspot[hidden] { display: none !important; }
+@keyframes latido { 0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, .55); } 70% { box-shadow: 0 0 0 14px rgba(255, 255, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+.ficha-hs { position: absolute; left: 0; top: 0; width: 240px; background: var(--blanco); box-shadow: var(--sombra-hover); padding: 16px; font-size: 14px; pointer-events: auto; z-index: 3; }
+.ficha-hs strong { display: block; font-weight: 600; margin-bottom: 4px; }
+.ficha-hs span { color: var(--acero); }
+.ficha-hs .medida { display: block; margin-top: 8px; font-size: 13px; color: var(--azul); font-variant-numeric: tabular-nums; }
+.sin-webgl { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(255, 255, 255, .85); font-size: 14px; text-align: center; padding: 24px; }
+
+@media (max-width: 760px) {
+  .hero { height: auto; background: var(--blanco); overflow: visible; }
+  #visor { position: relative; height: 380px; background: linear-gradient(135deg, var(--azul-hero), var(--azul-hero-2)); overflow: hidden; }
+  .hero .wrap { height: auto; pointer-events: auto; }
+  .hero-card { position: static; width: auto; max-width: none; padding: 24px 0 32px; }
+  .hero-card h1 { font-size: 29px; }
+  .capa-visor { position: absolute; inset: 0 0 auto; height: 380px; pointer-events: none; }
+}
+.capa-visor { position: absolute; inset: 0; pointer-events: none; }
+.capa-visor > * { pointer-events: auto; }
+.capa-visor .pista, .capa-visor .escena-tag { pointer-events: none; }
+
+/* ---------- Secciones ---------- */
+section { padding-block: 64px; }
+.gris { background: var(--niebla); }
+.cabecera { display: flex; flex-direction: column; gap: 8px; margin-bottom: 32px; max-width: 680px; }
+.cabecera h2 { font-size: 29px; }
+.cabecera p { color: var(--acero); }
+
+/* Usos: grilla de 4 tarjetas */
+.grid4 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.tarjeta { background: var(--blanco); box-shadow: var(--sombra); display: flex; flex-direction: column; transition: box-shadow .2s; min-width: 0; }
+.tarjeta:hover { box-shadow: var(--sombra-hover); }
+.tarjeta .icono { height: 120px; display: grid; place-items: center; background: linear-gradient(135deg, #e9f2fa, #d5e6f5); color: var(--azul-hero-2); }
+.tarjeta .icono svg { width: 44px; height: 44px; }
+.tarjeta .cuerpo { padding: 24px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.tarjeta h3 { font-size: 20px; }
+.tarjeta p { color: var(--grafito); font-size: 14px; }
+.tarjeta .dato { margin-top: auto; padding-top: 12px; font-size: 13px; color: var(--acero); border-top: 1px solid var(--linea); }
+@media (max-width: 1000px) { .grid4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .grid4 { grid-template-columns: 1fr; } }
+
+/* Qué incluye: lista + ficha técnica */
+.dos { display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items: start; }
+.lista-inc { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 32px 24px; }
+.lista-inc li { display: flex; gap: 16px; min-width: 0; }
+.lista-inc svg { width: 28px; height: 28px; flex: none; color: var(--acero); margin-top: 2px; }
+.lista-inc h3 { font-size: 16px; margin-bottom: 4px; }
+.lista-inc p { color: var(--grafito); font-size: 14px; }
+.ficha { background: var(--blanco); box-shadow: var(--sombra); padding: 24px; min-width: 0; }
+.ficha h3 { font-size: 16px; margin-bottom: 4px; }
+.ficha > p { color: var(--acero); font-size: 13px; margin-bottom: 16px; }
+.ficha dl { margin: 0; display: grid; grid-template-columns: auto 1fr; font-size: 14px; }
+.ficha dt, .ficha dd { padding: 10px 0; border-top: 1px solid var(--linea); margin: 0; }
+.ficha dt { color: var(--acero); padding-right: 16px; }
+.ficha dd { font-variant-numeric: tabular-nums; }
+@media (max-width: 900px) { .dos { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .lista-inc { grid-template-columns: 1fr; } }
+
+/* Proceso: secuencia real, por eso va numerada */
+.pasos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; counter-reset: paso; }
+.pasos li { position: relative; padding: 0 24px 0 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.pasos .num { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--acero); font-variant-numeric: tabular-nums; }
+.pasos .num b { width: 32px; height: 32px; border-radius: 50%; background: var(--azul); color: var(--blanco); display: grid; place-items: center; font-weight: 600; flex: none; }
+.pasos .num::after { content: ""; flex: 1; height: 1px; background: var(--linea); }
+.pasos li:last-child .num::after { display: none; }
+.pasos h3 { font-size: 18px; margin-top: 8px; }
+.pasos p { color: var(--grafito); font-size: 14px; }
+@media (max-width: 900px) { .pasos { grid-template-columns: 1fr 1fr; gap: 32px 0; } }
+@media (max-width: 560px) { .pasos { grid-template-columns: 1fr; } }
+
+/* Planes */
+.planes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; }
+.plan { background: var(--blanco); box-shadow: var(--sombra); padding: 32px; display: flex; flex-direction: column; gap: 16px; min-width: 0; position: relative; }
+.plan.destacado { outline: 2px solid var(--azul); }
+.plan .etiqueta { position: absolute; top: 0; right: 24px; transform: translateY(-50%); background: var(--azul); color: var(--blanco); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: var(--r); letter-spacing: .04em; text-transform: uppercase; }
+.plan h3 { font-size: 22px; }
+.plan .escenas { font-size: 29px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.plan .escenas small { display: block; font-size: 13px; font-weight: 400; color: var(--acero); }
+.plan ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: var(--grafito); flex: 1; }
+.plan li { display: flex; gap: 10px; }
+.plan li::before { content: ""; flex: none; width: 14px; height: 8px; margin-top: 5px; border-left: 2px solid var(--azul); border-bottom: 2px solid var(--azul); transform: rotate(-45deg); }
+.plan .ideal { font-size: 13px; color: var(--acero); border-top: 1px solid var(--linea); padding-top: 12px; }
+.plan .btn { align-self: flex-start; }
+@media (max-width: 900px) { .planes { grid-template-columns: 1fr; max-width: 520px; } }
+
+/* Cotizador */
+.cotizador { display: grid; grid-template-columns: 1fr 1fr; background: var(--blanco); box-shadow: var(--sombra); }
+.cot-form { padding: 32px; display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.campo { display: flex; flex-direction: column; gap: 8px; border: 0; margin: 0; padding: 0; min-width: 0; }
+.campo > label, .campo legend { font-weight: 600; font-size: 14px; padding: 0; }
+.opciones { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.opciones label { display: flex; align-items: center; gap: 10px; border: 1px solid var(--linea); border-radius: var(--r); padding: 10px 12px; cursor: pointer; font-size: 14px; }
+.opciones label:has(input:checked) { border-color: var(--azul); background: #f0f6fc; }
+.opciones input { accent-color: var(--azul); margin: 0; }
+.area-fila { display: flex; gap: 16px; align-items: center; }
+.area-fila input[type=range] { flex: 1; accent-color: var(--azul); min-width: 0; }
+.area-fila input[type=number] { width: 104px; font: inherit; padding: 8px 10px; border: 1px solid var(--acero); border-radius: var(--r); font-variant-numeric: tabular-nums; }
+.area-fila span { color: var(--acero); font-size: 14px; }
+.extras { display: flex; flex-direction: column; gap: 8px; }
+.extras label { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; cursor: pointer; }
+.extras input { accent-color: var(--azul); margin: 3px 0 0; }
+.extras small { color: var(--acero); display: block; }
+.cot-res { background: linear-gradient(135deg, var(--azul-hero), var(--azul-hero-2)); color: var(--blanco); padding: 32px; display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.cot-res h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; color: rgba(255, 255, 255, .8); }
+.cifras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.cifra b { display: block; font-size: 37px; font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.cifra span { font-size: 13px; color: rgba(255, 255, 255, .8); }
+.recomienda { background: rgba(255, 255, 255, .1); padding: 16px; border-radius: var(--r); font-size: 14px; }
+.recomienda strong { font-weight: 600; }
+.mensaje { font-size: 13px; color: rgba(255, 255, 255, .85); background: rgba(0, 0, 0, .2); padding: 12px; border-radius: var(--r); white-space: pre-wrap; overflow-wrap: anywhere; }
+.cot-res .acciones { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: auto; }
+.cot-res .btn { background: var(--blanco); color: var(--azul-hero-2); }
+.cot-res .btn:hover { background: #e6f0f9; }
+.btn-texto { background: none; border: 0; color: var(--blanco); font: 400 14px var(--fuente); cursor: pointer; padding: 8px 0; text-decoration: underline; }
+.nota { font-size: 12px; color: rgba(255, 255, 255, .7); }
+@media (max-width: 900px) { .cotizador { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .opciones { grid-template-columns: 1fr; } .cifras { grid-template-columns: 1fr 1fr; } .cot-form, .cot-res { padding: 24px; } }
+
+/* Preguntas */
+.faq { max-width: 820px; border-top: 1px solid var(--linea); }
+.faq details { border-bottom: 1px solid var(--linea); }
+.faq summary { cursor: pointer; list-style: none; padding: 18px 40px 18px 0; font-weight: 600; font-size: 16px; position: relative; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: ""; position: absolute; right: 8px; top: 24px; width: 8px; height: 8px; border-right: 2px solid var(--negro); border-bottom: 2px solid var(--negro); transform: rotate(45deg); transition: transform .2s; }
+.faq details[open] summary::after { transform: rotate(-135deg); top: 28px; }
+.faq details p { padding: 0 40px 20px 0; color: var(--grafito); max-width: 68ch; }
+
+/* Banda final */
+.banda { background: linear-gradient(135deg, var(--azul-hero), var(--azul-hero-2)); color: var(--blanco); }
+.banda .wrap { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: center; }
+.banda h2 { font-size: 37px; margin-bottom: 12px; }
+.banda p { color: rgba(255, 255, 255, .85); max-width: 52ch; }
+.contacto { background: var(--blanco); color: var(--negro); padding: 32px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.contacto .fila { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; }
+.contacto .fila svg { width: 20px; height: 20px; color: var(--acero); flex: none; margin-top: 1px; }
+.contacto .fila b { display: block; font-weight: 600; font-size: 15px; user-select: all; }
+.contacto .fila span { color: var(--acero); }
+.copiar { margin-left: auto; background: none; border: 1px solid var(--linea); border-radius: var(--r); font: 13px var(--fuente); padding: 4px 10px; cursor: pointer; color: var(--grafito); flex: none; }
+.copiar:hover { background: var(--niebla); }
+@media (max-width: 900px) { .banda .wrap { grid-template-columns: 1fr; } .banda h2 { font-size: 29px; } }
+
+/* Pie */
+footer { background: var(--niebla); font-size: 13px; color: var(--acero); padding-block: 32px; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; }
+footer nav { display: flex; gap: 16px; flex-wrap: wrap; }
+footer a { color: var(--acero); }
+footer .copy { margin-left: auto; }
+
+.arriba { position: fixed; right: max(24px, calc(env(safe-area-inset-right, 0px) + 16px)); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); display: inline-flex; align-items: center; gap: 6px; background: var(--blanco); border: 1px solid var(--negro); border-radius: var(--r); font: 13px var(--fuente); color: var(--negro); padding: 8px 12px; box-shadow: var(--sombra); cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 40; }
+.arriba.visible { opacity: 1; pointer-events: auto; }
+.arriba svg { width: 14px; height: 14px; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="Kraftor Tours 360, ir al inicio">
+      <img src="img/logo_kraftor_280x100.png" alt="Kraftor Innova" width="95" height="34" />
+      <span class="sello">Tours<br />360°</span>
+    </a>
+    <ul>
+      <li><a href="#usos">Para quién</a></li>
+      <li><a href="#incluye">Qué incluye</a></li>
+      <li><a href="#proceso">Cómo trabajamos</a></li>
+      <li><a href="#planes">Planes</a></li>
+      <li><a href="#preguntas">Preguntas</a></li>
+    </ul>
+    <a class="btn" href="#cotizar">Cotizar mi tour</a>
+  </div>
+</header>
+
+<main id="inicio">
+  <!-- ===== Héroe ===== -->
+  <section class="hero" style="padding-block:0" aria-label="Demostración de tour virtual">
+    <div id="visor" tabindex="0" aria-label="Visor 360°. Arrastra o usa las flechas del teclado para mirar alrededor."></div>
+    <div class="capa-visor" id="capa">
+      <div class="escena-tag" id="escenaTag">Escena 1 de 6 · Sala-comedor</div>
+      <div class="pista" id="pista">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h8M8 12l3-3M8 12l3 3M16 12l-3-3M16 12l-3 3"/><circle cx="12" cy="12" r="10"/></svg>
+        Arrastra para mirar alrededor
+      </div>
+      <div class="controles" role="group" aria-label="Controles del visor">
+        <button type="button" id="zoomMas" aria-label="Acercar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        <button type="button" id="zoomMenos" aria-label="Alejar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+        <button type="button" id="pantalla" aria-label="Pantalla completa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="hero-card">
+        <span class="eyebrow">Tours virtuales 360°</span>
+        <h1>Que recorran tu espacio antes de visitarlo</h1>
+        <p>Fotografiamos tu inmueble, local u oficina en 360° y lo convertimos en un recorrido que tus clientes abren desde el celular. Ven cada ambiente, las medidas y los detalles, sin coordinar una visita.</p>
+        <div class="acciones">
+          <a class="btn" href="#cotizar">Calcular mi tour
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="link" href="#planes">Ver planes</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Para quién ===== -->
+  <section id="usos" class="gris">
+    <div class="wrap">
+      <div class="cabecera">
+        <span class="eyebrow">Para quién</span>
+        <h2>Un recorrido para cada tipo de espacio</h2>
+        <p>El tour hace el trabajo de la primera visita: filtra a los curiosos y trae a los interesados con las dudas resueltas.</p>
+      </div>
+      <div class="grid4">
+        <article class="tarjeta">
+          <div class="icono"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M8 42V20l16-12 16 12v22z"/><path d="M19 42V30h10v12"/><path d="M4 23 24 8l20 15"/></svg></div>
+          <div class="cuerpo">
+            <h3>Inmobiliarias y proyectos</h3>
+            <p>Departamentos modelo, casas y proyectos en construcción. Comparte el enlace en portales inmobiliarios y en tus redes.</p>
+            <span class="dato">De 6 a 15 escenas por inmueble</span>
+          </div>
+        </article>
+        <article class="tarjeta">
+          <div class="icono"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M6 32v-6l5-9h26l5 9v6z"/><path d="M6 26h36M11 17l3-6h20l3 6"/><circle cx="14" cy="34" r="4"/><circle cx="34" cy="34" r="4"/></svg></div>
+          <div class="cuerpo">
+            <h3>Concesionarios y showrooms</h3>
+            <p>Recorre el salón de ventas y mira cada vehículo por dentro y por fuera. Etiqueta modelos con ficha técnica y precio.</p>
+            <span class="dato">Escenas dentro de la cabina</span>
+          </div>
+        </article>
+        <article class="tarjeta">
+          <div class="icono"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M6 36h36M8 36V24a4 4 0 0 1 4-4h24a4 4 0 0 1 4 4v12"/><path d="M14 20v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4M8 36v4M40 36v4"/></svg></div>
+          <div class="cuerpo">
+            <h3>Hoteles, restaurantes y alquileres</h3>
+            <p>Habitaciones, salones, terrazas y alojamientos de temporada. El huésped reserva sabiendo lo que va a encontrar.</p>
+            <span class="dato">Una escena por tipo de habitación</span>
+          </div>
+        </article>
+        <article class="tarjeta">
+          <div class="icono"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M8 42V12h32v30M4 42h40"/><path d="M24 18v10M19 23h10M20 42v-7h8v7"/></svg></div>
+          <div class="cuerpo">
+            <h3>Clínicas y laboratorios</h3>
+            <p>El paciente conoce la recepción, los consultorios y los equipos antes de su cita. Transmite orden y confianza.</p>
+            <span class="dato">Ideal con plano interactivo</span>
+          </div>
+        </article>
+        <article class="tarjeta">
+          <div class="icono"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M6 20 24 8l18 12"/><path d="M10 20v22M38 20v22M6 42h36M10 26h28"/><path d="M18 42V32h12v10"/></svg></div>
+          <div class="cuerpo">
+            <h3>Locales de eventos</h3>
+            <p>Salones, jardines y capillas para bodas y eventos. Los novios y organizadores ven el espacio sin moverse de casa.</p>
+            <span class="dato">Escenas de día y de noche</span>
+          </div>
+        </article>
+        <article class="tarjeta">
+          <div class="icono"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M4 42V22l10 6v-6l10 6v-6l10 6V10h10v32z"/><path d="M4 42h40M12 36h4M22 36h4M32 36h4"/></svg></div>
+          <div class="cuerpo">
+            <h3>Industria, colegios y oficinas</h3>
+            <p>Plantas, almacenes, talleres de formación y aulas. Útil para admisiones, inducción de personal y visitas de clientes.</p>
+            <span class="dato">Varias sedes en un mismo tour</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Qué incluye ===== -->
+  <section id="incluye">
+    <div class="wrap">
+      <div class="cabecera">
+        <span class="eyebrow">Qué incluye</span>
+        <h2>Lo que recibes con tu tour</h2>
+        <p>Nos encargamos de todo: la captura, el diseño, la experiencia y el alojamiento. Tú solo compartes el enlace.</p>
+      </div>
+      <div class="dos">
+        <ul class="lista-inc">
+          <li>
+            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h5l2-3h8l2 3h5v14H3z"/><circle cx="14" cy="15" r="4.5"/></svg>
+            <div><h3>Captura profesional</h3><p>Cámara réflex, lentes gran angular y cabezal panorámico. Cada escena se arma con varias exposiciones para que se vean bien la ventana y el interior a la vez.</p></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M3 4h22v20H3z"/><path d="M3 9h22M8 14h6M8 18h10"/></svg>
+            <div><h3>Diseño con tu marca</h3><p>Unimos las fotos y armamos la interfaz del tour con tu logo, tus colores, un menú de ambientes y plano interactivo.</p></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="12" r="4"/><path d="M14 26s-8-7.5-8-14a8 8 0 0 1 16 0c0 6.5-8 14-8 14z"/></svg>
+            <div><h3>Puntos de interés</h3><p>Íconos dentro de la escena con texto, fotos, video o un enlace. Por ejemplo, el acabado del piso o la ficha de un producto.</p></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11v6h4l6 5V6l-6 5z"/><path d="M18 10a5 5 0 0 1 0 8M21 7a9 9 0 0 1 0 14"/></svg>
+            <div><h3>Audio y recorrido guiado</h3><p>Música o narración que cambia según el ambiente, y un modo guiado que recorre el espacio solo, como una visita con anfitrión.</p></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V6M4 22h20"/><path d="M8 18l4-5 4 3 6-8"/></svg>
+            <div><h3>Alojamiento y estadísticas</h3><p>Tu tour queda en línea en nuestro servidor, con enlace propio y código para tu web. Te mostramos cuántas personas lo visitan.</p></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="14" r="11"/><circle cx="14" cy="14" r="4"/></svg>
+            <div><h3>Tu marca en el nadir</h3><p>El nadir es el punto del piso donde estaba el trípode. Lo tapamos con tu logo, como verás si miras hacia abajo en el visor.</p></div>
+          </li>
+        </ul>
+        <aside class="ficha" aria-label="Ficha técnica de entrega">
+          <h3>Ficha técnica de entrega</h3>
+          <p>Valores del plan Profesional.</p>
+          <dl>
+            <dt>Resolución por escena</dt><dd>8K equirectangular (7680 × 3840 px)</dd>
+            <dt>Escenas</dt><dd>Hasta 25</dd>
+            <dt>Captura en sitio</dt><dd>1 jornada (hasta 4 h)</dd>
+            <dt>Entrega</dt><dd>7 días hábiles</dd>
+            <dt>Formato</dt><dd>Tour web HTML5 + fotos 360 en JPG</dd>
+            <dt>Alojamiento</dt><dd>12 meses incluidos, con estadísticas de visitas</dd>
+            <dt>Se ve en</dt><dd>Celular, tablet, computadora y visores VR</dd>
+            <dt>Cambios</dt><dd>2 rondas de ajustes</dd>
+          </dl>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Proceso ===== -->
+  <section id="proceso" class="gris">
+    <div class="wrap">
+      <div class="cabecera">
+        <span class="eyebrow">Cómo trabajamos</span>
+        <h2>De la visita al enlace en cuatro pasos</h2>
+      </div>
+      <ol class="pasos">
+        <li>
+          <span class="num"><b>1</b> Día 1</span>
+          <h3>Visita técnica</h3>
+          <p>Recorremos el espacio contigo, definimos las escenas y el mejor horario de luz.</p>
+        </li>
+        <li>
+          <span class="num"><b>2</b> Día 2 a 5</span>
+          <h3>Captura</h3>
+          <p>Fotografiamos cada escena con trípode y cámara 360°. Te pedimos el espacio ordenado y con luces encendidas.</p>
+        </li>
+        <li>
+          <span class="num"><b>3</b> 3 a 5 días hábiles</span>
+          <h3>Edición y montaje</h3>
+          <p>Corregimos color, retiramos el trípode, colocamos tu logo y armamos los puntos de interés.</p>
+        </li>
+        <li>
+          <span class="num"><b>4</b> Entrega</span>
+          <h3>Publicación</h3>
+          <p>Te enviamos el enlace para revisar. Con tu visto bueno, lo dejamos publicado y te damos el código para tu web.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== Planes ===== -->
+  <section id="planes">
+    <div class="wrap">
+      <div class="cabecera">
+        <span class="eyebrow">Planes</span>
+        <h2>Elige según el tamaño de tu espacio</h2>
+        <p>El precio depende del número de escenas y la distancia. Calcula tu caso abajo y te enviamos la cotización exacta por WhatsApp.</p>
+      </div>
+      <div class="planes">
+        <article class="plan">
+          <h3>Esencial</h3>
+          <div class="escenas">Hasta 8 <small>escenas</small></div>
+          <ul>
+            <li>Fotografía 360° profesional</li>
+            <li>Navegación entre ambientes</li>
+            <li>Logo en el nadir</li>
+            <li>Enlace propio para compartir</li>
+          </ul>
+          <p class="ideal">Ideal para un departamento o un local pequeño.</p>
+          <a class="btn" href="#cotizar" data-plan="esencial">Cotizar Esencial</a>
+        </article>
+        <article class="plan destacado">
+          <span class="etiqueta">El más pedido</span>
+          <h3>Profesional</h3>
+          <div class="escenas">Hasta 25 <small>escenas</small></div>
+          <ul>
+            <li>Todo lo del plan Esencial</li>
+            <li>Plano interactivo</li>
+            <li>Puntos de interés con fotos y video</li>
+            <li>Código para insertar en tu web</li>
+            <li>Audio por ambiente y recorrido guiado</li>
+            <li>Estadísticas de visitas</li>
+          </ul>
+          <p class="ideal">Ideal para casas, hoteles, restaurantes, concesionarios y clínicas.</p>
+          <a class="btn" href="#cotizar" data-plan="profesional">Cotizar Profesional</a>
+        </article>
+        <article class="plan">
+          <h3>Proyecto</h3>
+          <div class="escenas">25+ <small>escenas, varias sedes</small></div>
+          <ul>
+            <li>Todo lo del plan Profesional</li>
+            <li>Publicación en Google Maps</li>
+            <li>Varias sedes en un mismo tour</li>
+            <li>Actualización de escenas sueltas</li>
+          </ul>
+          <p class="ideal">Ideal para plantas industriales, colegios, locales de eventos y cadenas.</p>
+          <a class="btn" href="#cotizar" data-plan="proyecto">Cotizar Proyecto</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Cotizador ===== -->
+  <section id="cotizar" class="gris">
+    <div class="wrap">
+      <div class="cabecera">
+        <span class="eyebrow">Calcula tu tour</span>
+        <h2>¿Cuántas escenas necesitas?</h2>
+        <p>Una escena es cada punto desde donde se toma una foto 360°. Cuéntanos tu espacio y te damos un estimado al instante.</p>
+      </div>
+      <div class="cotizador">
+        <form class="cot-form" id="cotForm" novalidate>
+          <fieldset class="campo">
+            <legend>Tipo de espacio</legend>
+            <div class="opciones">
+              <label><input type="radio" name="tipo" id="t-vivienda" value="vivienda" checked /> Departamento o casa</label>
+              <label><input type="radio" name="tipo" id="t-local" value="local" /> Concesionario o tienda</label>
+              <label><input type="radio" name="tipo" id="t-hotel" value="hotel" /> Hotel o restaurante</label>
+              <label><input type="radio" name="tipo" id="t-salud" value="salud" /> Clínica o laboratorio</label>
+              <label><input type="radio" name="tipo" id="t-eventos" value="eventos" /> Local de eventos</label>
+              <label><input type="radio" name="tipo" id="t-inst" value="inst" /> Industria, colegio u oficina</label>
+            </div>
+          </fieldset>
+          <div class="campo">
+            <label for="areaNum">Área techada aproximada</label>
+            <div class="area-fila">
+              <input type="range" id="areaRango" min="30" max="3000" step="10" value="120" aria-label="Área en metros cuadrados" />
+              <input type="number" id="areaNum" min="20" max="20000" step="10" value="120" inputmode="numeric" />
+              <span>m²</span>
+            </div>
+          </div>
+          <fieldset class="campo">
+            <legend>Extras</legend>
+            <div class="extras">
+              <label><input type="checkbox" id="x-plano" /> <span>Plano interactivo <small>Para que se ubiquen dentro del espacio</small></span></label>
+              <label><input type="checkbox" id="x-maps" /> <span>Publicación en Google Maps <small>Tu negocio con recorrido dentro de la ficha de Maps</small></span></label>
+              <label><input type="checkbox" id="x-video" /> <span>Video recorrido para redes <small>Clip vertical de 30 s armado desde el tour</small></span></label>
+            </div>
+          </fieldset>
+        </form>
+        <div class="cot-res" aria-live="polite">
+          <h3>Tu estimado</h3>
+          <div class="cifras">
+            <div class="cifra"><b id="rEscenas">10</b><span>escenas</span></div>
+            <div class="cifra"><b id="rHoras">2</b><span>horas de captura</span></div>
+            <div class="cifra"><b id="rDias">5</b><span>días hábiles de entrega</span></div>
+          </div>
+          <div class="recomienda" id="rPlan">Te recomendamos el plan <strong>Profesional</strong>.</div>
+          <div class="mensaje" id="rMensaje"></div>
+          <div class="acciones">
+            <a class="btn" id="rWhats" href="https://wa.me/51958317484" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.4.8 3.2.6a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>
+              Enviar por WhatsApp</a>
+            <button type="button" class="btn-texto" id="rCopiar">Copiar mensaje</button>
+          </div>
+          <p class="nota">Estimado referencial. Lo confirmamos en la visita técnica.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Preguntas ===== -->
+  <section id="preguntas">
+    <div class="wrap">
+      <div class="cabecera">
+        <span class="eyebrow">Preguntas frecuentes</span>
+        <h2>Lo que nos suelen preguntar</h2>
+      </div>
+      <div class="faq">
+        <details open>
+          <summary>¿En qué se diferencia de un video o de unas fotos?</summary>
+          <p>En un video el recorrido lo decide quien grabó. En un tour 360° cada persona mira hacia donde quiere, se detiene en lo que le interesa y entra al ambiente que elija. Las fotos muestran un ángulo; el tour muestra el espacio completo y cómo se conectan los ambientes.</p>
+        </details>
+        <details>
+          <summary>¿Cuánto demora?</summary>
+          <p>La captura toma una jornada para la mayoría de espacios. La entrega es de 5 a 10 días hábiles según el número de escenas.</p>
+        </details>
+        <details>
+          <summary>¿Mis clientes necesitan instalar algo?</summary>
+          <p>No. El tour se abre en el navegador del celular o la computadora. En celular también se puede mirar moviendo el teléfono, y funciona con visores de realidad virtual.</p>
+        </details>
+        <details>
+          <summary>¿Puedo ponerlo en mi web y en mis redes?</summary>
+          <p>Sí. Te damos un enlace para compartir en WhatsApp, Instagram o portales inmobiliarios, y un código para insertarlo en tu web.</p>
+        </details>
+        <details>
+          <summary>¿Qué pasa si el espacio cambia después?</summary>
+          <p>Volvemos a capturar solo las escenas que cambiaron y las reemplazamos. El resto del tour y el enlace se mantienen.</p>
+        </details>
+        <details>
+          <summary>¿Trabajan fuera de Lima?</summary>
+          <p>Sí. Coordinamos la fecha de captura y sumamos a la cotización el traslado.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Banda final / contacto ===== -->
+  <section class="banda" id="contacto">
+    <div class="wrap">
+      <div>
+        <h2>Agenda tu visita técnica</h2>
+        <p>Cuéntanos qué espacio quieres mostrar. Te respondemos el mismo día con fecha para la visita y la cotización.</p>
+      </div>
+      <div class="contacto">
+        <div class="fila">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.4A8.5 8.5 0 1 1 21 11.5z"/></svg>
+          <div><b>+51 958 317 484</b><span>WhatsApp</span></div>
+          <button type="button" class="copiar" data-copiar="+51 958 317 484">Copiar</button>
+        </div>
+        <div class="fila">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg>
+          <div><b>info@kraftor.com</b><span>Correo</span></div>
+          <button type="button" class="copiar" data-copiar="info@kraftor.com">Copiar</button>
+        </div>
+        <div class="fila">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/></svg>
+          <div><b>Calle Santa Rosa 133 Int. 702</b><span>Surquillo, Lima</span></div>
+        </div>
+        <a class="btn" href="https://wa.me/51958317484?text=Hola%20Kraftor%2C%20quiero%20agendar%20una%20visita%20t%C3%A9cnica%20para%20un%20tour%20360%C2%B0." target="_blank" rel="noopener" style="align-self:flex-start">Escribir por WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <nav aria-label="Redes sociales">
+      <a href="https://facebook.com/kraftordigital" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://instagram.com/kraftordigital" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://linkedin.com/company/kraftor" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+    <span class="copy">© 2026 Kraftor · Agencia digital</span>
+  </div>
+</footer>
+
+<button type="button" class="arriba" id="arriba">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  Volver al principio
+</button>
+
+<script src="js/three.min.js"></script>
+<script>
+/* =========================================================
+   VISOR 360°
+   La sala es una caja vista desde dentro: cada pared es un canvas
+   dibujado a escala (1 m = S px) y los muebles son cajas con luz.
+   ========================================================= */
+(function () {
+  const visor = document.getElementById('visor');
+  const capa = document.getElementById('capa');
+  const pista = document.getElementById('pista');
+  const reducir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!window.THREE) { falla(); return; }
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ antialias: true }); }
+  catch (e) { falla(); return; }
+
+  function falla() {
+    visor.innerHTML = '<div class="sin-webgl">El visor 360° necesita un navegador con WebGL.<br>Abre esta página en Chrome, Edge o Safari actualizados.</div>';
+    pista.classList.add('oculta');
+  }
+
+  // Medidas de la sala en metros
+  const W = 7.2, H = 2.7, D = 6, OJO = 1.55, S = 240;
+  const PISO = -H / 2;
+
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  visor.appendChild(renderer.domElement);
+  const escena = new THREE.Scene();
+  const camara = new THREE.PerspectiveCamera(75, 1, 0.05, 100);
+  camara.position.set(0, PISO + OJO, 0);
+
+  // ---------- utilidades de dibujo ----------
+  function lienzo(anchoM, altoM, dibujar) {
+    const c = document.createElement('canvas');
+    c.width = Math.round(anchoM * S); c.height = Math.round(altoM * S);
+    const g = c.getContext('2d');
+    // Se dibuja espejado porque la cara se ve desde dentro de la caja
+    g.translate(c.width, 0); g.scale(-1, 1);
+    dibujar(g, c.width, c.height);
+    const t = new THREE.CanvasTexture(c);
+    t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    t.minFilter = THREE.LinearFilter; t.generateMipmaps = false;
+    return t;
+  }
+  const m = v => v * S;                 // metros a px
+  const y = (h) => m(H - h);            // altura desde el piso a px (y hacia abajo)
+
+  function pintura(g, w, h, base) {
+    g.fillStyle = base; g.fillRect(0, 0, w, h);
+    const v = g.createLinearGradient(0, 0, 0, h);
+    v.addColorStop(0, 'rgba(255,255,255,.18)'); v.addColorStop(.7, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(60,50,40,.16)');
+    g.fillStyle = v; g.fillRect(0, 0, w, h);
+    const l = g.createLinearGradient(0, 0, w, 0);
+    l.addColorStop(0, 'rgba(40,35,30,.14)'); l.addColorStop(.12, 'rgba(0,0,0,0)'); l.addColorStop(.88, 'rgba(0,0,0,0)'); l.addColorStop(1, 'rgba(40,35,30,.14)');
+    g.fillStyle = l; g.fillRect(0, 0, w, h);
+    // contrazócalo
+    g.fillStyle = '#e9e5df'; g.fillRect(0, y(0.1), w, m(0.1));
+    g.fillStyle = 'rgba(0,0,0,.12)'; g.fillRect(0, y(0.1), w, 2);
+  }
+  function cuadro(g, x, h0, ancho, alto, fondo, dibujo) {
+    g.fillStyle = 'rgba(0,0,0,.18)'; g.fillRect(m(x) + 6, y(h0 + alto) + 8, m(ancho), m(alto));
+    g.fillStyle = '#2b2b2b'; g.fillRect(m(x), y(h0 + alto), m(ancho), m(alto));
+    g.fillStyle = '#fafafa'; g.fillRect(m(x) + 10, y(h0 + alto) + 10, m(ancho) - 20, m(alto) - 20);
+    g.fillStyle = fondo; g.fillRect(m(x) + 34, y(h0 + alto) + 34, m(ancho) - 68, m(alto) - 68);
+    if (dibujo) dibujo(m(x) + 34, y(h0 + alto) + 34, m(ancho) - 68, m(alto) - 68);
+  }
+
+  // ---------- paredes ----------
+  const BLANCO = '#efece7';
+
+  // Pared del ventanal (frente, -z)
+  const frente = lienzo(W, H, (g, w, h) => {
+    pintura(g, w, h, BLANCO);
+    const x0 = 2.0, x1 = 5.2, h0 = 0.25, h1 = 2.5;
+    // cielo y ciudad
+    const cielo = g.createLinearGradient(0, y(h1), 0, y(h0));
+    cielo.addColorStop(0, '#7fb3e0'); cielo.addColorStop(.7, '#cfe3f3'); cielo.addColorStop(1, '#e8f0f5');
+    g.fillStyle = cielo; g.fillRect(m(x0), y(h1), m(x1 - x0), m(h1 - h0));
+    g.save(); g.beginPath(); g.rect(m(x0), y(h1), m(x1 - x0), m(h1 - h0)); g.clip();
+    const edif = [[2.0, .5, 1.25], [2.45, .35, 1.6], [2.75, .55, 1.1], [3.95, .4, 1.45], [4.3, .6, 1.2], [4.85, .45, 1.7]];
+    edif.forEach(([bx, bw, bh], i) => {
+      g.fillStyle = i % 2 ? '#a9bccb' : '#b9c8d4'; g.fillRect(m(bx), y(h0 + bh), m(bw), m(bh));
+      g.fillStyle = 'rgba(255,255,255,.35)';
+      for (let fy = h0 + bh - .12; fy > h0 + .5; fy -= .14) for (let fx = bx + .06; fx < bx + bw - .06; fx += .1) g.fillRect(m(fx), y(fy), m(.05), m(.06));
+    });
+    // parque: copas de árboles
+    for (let i = 0; i < 26; i++) {
+      const tx = x0 + (i / 25) * (x1 - x0) + Math.sin(i * 7.3) * .08, tr = .16 + (Math.sin(i * 3.1) + 1) * .06;
+      g.fillStyle = i % 3 ? '#6f9a5e' : '#5c8750';
+      g.beginPath(); g.arc(m(tx), y(h0 + .45 + Math.sin(i * 1.7) * .06), m(tr), 0, Math.PI * 2); g.fill();
+    }
+    g.fillStyle = '#5a7f4a'; g.fillRect(m(x0), y(h0 + .42), m(x1 - x0), m(.42));
+    g.restore();
+    // reflejo suave del vidrio
+    const brillo = g.createLinearGradient(m(x0), y(h1), m(x1), y(h0));
+    brillo.addColorStop(0, 'rgba(255,255,255,.22)'); brillo.addColorStop(.4, 'rgba(255,255,255,0)'); brillo.addColorStop(.6, 'rgba(255,255,255,.1)'); brillo.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = brillo; g.fillRect(m(x0), y(h1), m(x1 - x0), m(h1 - h0));
+    // carpintería de aluminio
+    g.fillStyle = '#3a3d40';
+    g.fillRect(m(x0) - 10, y(h1) - 10, m(x1 - x0) + 20, 14);
+    g.fillRect(m(x0) - 10, y(h0) - 4, m(x1 - x0) + 20, 14);
+    g.fillRect(m(x0) - 10, y(h1), 12, m(h1 - h0));
+    g.fillRect(m(x1) - 2, y(h1), 12, m(h1 - h0));
+    [1, 2, 3].forEach(k => g.fillRect(m(x0 + k * (x1 - x0) / 4) - 4, y(h1), 8, m(h1 - h0)));
+    // cortinas
+    [[x0 - .55, .5], [x1 + .05, .5]].forEach(([cx, cw]) => {
+      for (let i = 0; i < 10; i++) {
+        g.fillStyle = i % 2 ? '#d9d4cc' : '#cfc9bf';
+        g.fillRect(m(cx + i * cw / 10), y(2.62), m(cw / 10) + 1, m(2.55));
+      }
+      g.fillStyle = 'rgba(0,0,0,.08)'; g.fillRect(m(cx), y(.07), m(cw), 6);
+    });
+    g.fillStyle = '#8a8580'; g.fillRect(m(x0 - .6), y(2.64), m(x1 - x0 + 1.25), 8);
+    // luz que entra por la ventana
+    const luz = g.createRadialGradient(m(3.6), y(1.4), 10, m(3.6), y(1.4), m(3.2));
+    luz.addColorStop(0, 'rgba(255,250,235,.25)'); luz.addColorStop(1, 'rgba(255,250,235,0)');
+    g.fillStyle = luz; g.fillRect(0, 0, w, h);
+  });
+
+  // Pared de la cocina (derecha, +x)
+  const derecha = lienzo(D, H, (g, w, h) => {
+    pintura(g, w, h, BLANCO);
+    // refrigeradora empotrada
+    g.fillStyle = '#c9ccd0'; g.fillRect(m(.4), y(2.1), m(.8), m(2.1));
+    g.fillStyle = '#b3b7bc'; g.fillRect(m(.4), y(1.25), m(.8), 4);
+    g.fillStyle = '#7d8187'; g.fillRect(m(1.08), y(1.95), 6, m(.5)); g.fillRect(m(1.08), y(1.1), 6, m(.4));
+    // muebles bajos
+    g.fillStyle = '#f7f7f5'; g.fillRect(m(1.3), y(.88), m(3.6), m(.78));
+    g.fillStyle = '#d7d4cf';
+    for (let x = 1.3; x < 4.9; x += .6) g.fillRect(m(x), y(.88), 3, m(.78));
+    g.fillStyle = '#9a9690'; for (let x = 1.55; x < 4.9; x += .6) g.fillRect(m(x), y(.8), m(.12), 5);
+    g.fillStyle = '#3d3a36'; g.fillRect(m(1.3), y(.1), m(3.6), m(.1));
+    // tablero de cuarzo
+    g.fillStyle = '#2f3134'; g.fillRect(m(1.25), y(.92), m(3.7), m(.05));
+    // salpicadero de azulejos
+    g.fillStyle = '#e3e6e8'; g.fillRect(m(1.3), y(1.5), m(3.6), m(.58));
+    g.strokeStyle = 'rgba(0,0,0,.08)'; g.lineWidth = 2;
+    for (let x = 1.3; x <= 4.9; x += .15) { g.beginPath(); g.moveTo(m(x), y(1.5)); g.lineTo(m(x), y(.92)); g.stroke(); }
+    for (let hh = .92; hh <= 1.5; hh += .075) { g.beginPath(); g.moveTo(m(1.3), y(hh)); g.lineTo(m(4.9), y(hh)); g.stroke(); }
+    // cocina y campana
+    g.fillStyle = '#1e1f21'; g.fillRect(m(2.8), y(.94), m(.6), 6);
+    g.fillStyle = '#b9bdc2'; g.beginPath();
+    g.moveTo(m(2.75), y(1.62)); g.lineTo(m(3.45), y(1.62)); g.lineTo(m(3.3), y(1.8)); g.lineTo(m(2.9), y(1.8)); g.fill();
+    g.fillRect(m(2.98), y(2.35), m(.24), m(.56));
+    // muebles altos
+    g.fillStyle = '#f7f7f5'; g.fillRect(m(1.3), y(2.35), m(1.4), m(.75)); g.fillRect(m(3.5), y(2.35), m(1.4), m(.75));
+    g.fillStyle = '#d7d4cf'; [1.3, 2.0, 2.7, 3.5, 4.2, 4.9].forEach(x => g.fillRect(m(x), y(2.35), 3, m(.75)));
+    g.fillStyle = 'rgba(0,0,0,.1)'; g.fillRect(m(1.3), y(1.6), m(1.4), 6); g.fillRect(m(3.5), y(1.6), m(1.4), 6);
+    // repisa con vasos
+    g.fillStyle = '#8b6b4a'; g.fillRect(m(5.2), y(1.5), m(.6), 8);
+    ['#4f7a8c', '#c9a46b', '#e9e6e0'].forEach((c, i) => { g.fillStyle = c; g.fillRect(m(5.27 + i * .18), y(1.68), m(.1), m(.18)); });
+  });
+
+  // Pared de la puerta (izquierda, -x)
+  const izquierda = lienzo(D, H, (g, w, h) => {
+    pintura(g, w, h, BLANCO);
+    // puerta al dormitorio
+    g.fillStyle = '#e4e0d9'; g.fillRect(m(1.0) - 10, y(2.1) - 10, m(.9) + 20, m(2.1) + 10);
+    const pm = g.createLinearGradient(m(1), 0, m(1.9), 0);
+    pm.addColorStop(0, '#a77d55'); pm.addColorStop(1, '#94694a');
+    g.fillStyle = pm; g.fillRect(m(1.0), y(2.1), m(.9), m(2.1));
+    g.strokeStyle = 'rgba(0,0,0,.12)'; g.lineWidth = 3;
+    for (let x = 1.1; x < 1.9; x += .14) { g.beginPath(); g.moveTo(m(x), y(2.08)); g.lineTo(m(x), y(.02)); g.stroke(); }
+    g.fillStyle = '#d6d2cb'; g.fillRect(m(1.75), y(1.05), m(.1), 8);
+    // interruptor
+    g.fillStyle = '#ffffff'; g.fillRect(m(2.15), y(1.25), m(.08), m(.12));
+    g.strokeStyle = 'rgba(0,0,0,.15)'; g.strokeRect(m(2.15), y(1.25), m(.08), m(.12));
+    // dos cuadros
+    cuadro(g, 3.1, 1.2, .9, 1.1, '#cfd8dd', (x, yy, ww, hh) => {
+      g.fillStyle = '#0067b8'; g.beginPath(); g.arc(x + ww * .45, yy + hh * .55, ww * .28, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#e9b44c'; g.fillRect(x + ww * .2, yy + hh * .18, ww * .22, ww * .22);
+    });
+    cuadro(g, 4.3, 1.2, .9, 1.1, '#e7ddcf', (x, yy, ww, hh) => {
+      g.strokeStyle = '#3c3c3c'; g.lineWidth = 6;
+      g.beginPath(); g.moveTo(x + ww * .1, yy + hh * .8); g.bezierCurveTo(x + ww * .4, yy + hh * .1, x + ww * .6, yy + hh * .9, x + ww * .9, yy + hh * .25); g.stroke();
+    });
+    // banco
+    g.fillStyle = '#6d5440'; g.fillRect(m(3.2), y(.45), m(1.9), m(.06));
+    g.fillStyle = '#5a4535'; g.fillRect(m(3.3), y(.39), m(.05), m(.39)); g.fillRect(m(4.95), y(.39), m(.05), m(.39));
+  });
+
+  // Pared del televisor (atrás, +z)
+  const atras = lienzo(W, H, (g, w, h) => {
+    pintura(g, w, h, BLANCO);
+    // panel de madera tras el TV
+    const pm = g.createLinearGradient(m(2.1), 0, m(5.1), 0);
+    pm.addColorStop(0, '#7a5a40'); pm.addColorStop(1, '#8b6a4c');
+    g.fillStyle = pm; g.fillRect(m(2.1), y(2.7), m(3), m(2.6));
+    g.strokeStyle = 'rgba(0,0,0,.14)'; g.lineWidth = 3;
+    for (let x = 2.1; x < 5.1; x += .12) { g.beginPath(); g.moveTo(m(x), y(2.7)); g.lineTo(m(x), y(.1)); g.stroke(); }
+    // televisor
+    g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(m(2.82), y(1.72), m(1.6), m(.92));
+    g.fillStyle = '#15171a'; g.fillRect(m(2.8), y(1.75), m(1.6), m(.92));
+    const tv = g.createLinearGradient(m(2.8), y(1.75), m(4.4), y(.83));
+    tv.addColorStop(0, '#24282e'); tv.addColorStop(.5, '#2f353c'); tv.addColorStop(1, '#1b1e22');
+    g.fillStyle = tv; g.fillRect(m(2.83), y(1.72), m(1.54), m(.86));
+    // mueble bajo
+    g.fillStyle = '#efefec'; g.fillRect(m(2.3), y(.5), m(2.6), m(.36));
+    g.fillStyle = '#d4d1cb'; [2.95, 3.6, 4.25].forEach(x => g.fillRect(m(x), y(.5), 3, m(.36)));
+    g.fillStyle = 'rgba(0,0,0,.15)'; g.fillRect(m(2.3), y(.14), m(2.6), 6);
+    // estantes con libros
+    const colores = ['#0067b8', '#c9a46b', '#3f5f4a', '#b2463a', '#e2ddd3', '#2d3e50', '#d8b26e'];
+    [[.5, 1.0], [.5, 1.5], [.5, 2.0], [5.6, 1.2], [5.6, 1.7]].forEach(([x, hh], k) => {
+      g.fillStyle = '#6d5440'; g.fillRect(m(x), y(hh), m(1.1), 8);
+      let bx = x + .05;
+      for (let i = 0; i < 9; i++) {
+        const bw = .05 + ((i * 7 + k) % 4) * .015, bh = .2 + ((i * 5 + k) % 3) * .03;
+        if (bx + bw > x + 1.05) break;
+        g.fillStyle = colores[(i + k * 2) % colores.length]; g.fillRect(m(bx), y(hh + bh), m(bw), m(bh));
+        bx += bw + .008;
+        if (i === 4) bx += .12;
+      }
+    });
+  });
+
+  // Piso de madera: tablas a lo largo de z
+  const piso = (() => {
+    const c = document.createElement('canvas'); c.width = m(W); c.height = m(D);
+    const g = c.getContext('2d');
+    const tabla = .18, largo = 1.2;
+    let semilla = 7; const azar = () => (semilla = (semilla * 9301 + 49297) % 233280) / 233280;
+    for (let x = 0; x < W; x += tabla) {
+      let z = -azar() * largo;
+      while (z < D) {
+        const tono = 150 + Math.floor(azar() * 26);
+        g.fillStyle = `rgb(${tono}, ${Math.floor(tono * .74)}, ${Math.floor(tono * .52)})`;
+        g.fillRect(m(x), m(z), m(tabla), m(largo));
+        g.fillStyle = 'rgba(0,0,0,.18)'; g.fillRect(m(x), m(z), m(tabla), 2); g.fillRect(m(x), m(z), 2, m(largo));
+        g.fillStyle = 'rgba(60,35,15,.08)';
+        for (let v = 0; v < 3; v++) g.fillRect(m(x + .03 + azar() * .12), m(z), 1.5, m(largo));
+        z += largo;
+      }
+    }
+    const sombra = g.createRadialGradient(c.width / 2, c.height / 2, m(1), c.width / 2, c.height / 2, m(4.5));
+    sombra.addColorStop(0, 'rgba(0,0,0,0)'); sombra.addColorStop(1, 'rgba(30,20,10,.28)');
+    g.fillStyle = sombra; g.fillRect(0, 0, c.width, c.height);
+    const t = new THREE.CanvasTexture(c); t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    t.minFilter = THREE.LinearFilter; t.generateMipmaps = false; return t;
+  })();
+
+  // Techo con luces empotradas
+  const techo = (() => {
+    const c = document.createElement('canvas'); c.width = m(W) / 2; c.height = m(D) / 2;
+    const g = c.getContext('2d');
+    g.fillStyle = '#f6f5f2'; g.fillRect(0, 0, c.width, c.height);
+    const s = g.createRadialGradient(c.width / 2, c.height / 2, 10, c.width / 2, c.height / 2, c.width * .7);
+    s.addColorStop(0, 'rgba(0,0,0,0)'); s.addColorStop(1, 'rgba(0,0,0,.14)');
+    g.fillStyle = s; g.fillRect(0, 0, c.width, c.height);
+    for (let i = 1; i <= 3; i++) for (let j = 1; j <= 2; j++) {
+      const cx = c.width * i / 4, cy = c.height * j / 3;
+      const halo = g.createRadialGradient(cx, cy, 2, cx, cy, 40);
+      halo.addColorStop(0, 'rgba(255,248,225,.9)'); halo.addColorStop(1, 'rgba(255,248,225,0)');
+      g.fillStyle = halo; g.beginPath(); g.arc(cx, cy, 40, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#fffdf6'; g.beginPath(); g.arc(cx, cy, 9, 0, Math.PI * 2); g.fill();
+    }
+    return new THREE.CanvasTexture(c);
+  })();
+
+  const mat = t => new THREE.MeshBasicMaterial({ map: t, side: THREE.BackSide });
+  // Orden de caras de BoxGeometry: +x, -x, +y, -y, +z, -z
+  const sala = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), [mat(derecha), mat(izquierda), mat(techo), mat(piso), mat(atras), mat(frente)]);
+  escena.add(sala);
+
+  // ---------- muebles ----------
+  escena.add(new THREE.AmbientLight(0xffffff, .62));
+  const sol = new THREE.DirectionalLight(0xfff6e8, .55); sol.position.set(.5, 2, -4); escena.add(sol);
+  const relleno = new THREE.DirectionalLight(0xdfe8ff, .2); relleno.position.set(-2, 1, 3); escena.add(relleno);
+
+  function caja(ancho, alto, fondo, color, x, base, z) {
+    const malla = new THREE.Mesh(new THREE.BoxGeometry(ancho, alto, fondo), new THREE.MeshLambertMaterial({ color }));
+    malla.position.set(x, PISO + base + alto / 2, z); escena.add(malla); return malla;
+  }
+  // alfombra
+  const alf = new THREE.Mesh(new THREE.PlaneGeometry(2.8, 2.0), new THREE.MeshLambertMaterial({ color: 0xd9d3c7 }));
+  alf.rotation.x = -Math.PI / 2; alf.position.set(0, PISO + .006, 1.85); escena.add(alf);
+  // sofá mirando al televisor (+z)
+  const tela = 0x5d6d7c;
+  caja(2.2, .42, .72, tela, 0, 0, 1.31);
+  caja(2.2, .85, .2, tela, 0, 0, .85);
+  caja(.18, .6, .92, 0x55646f, -1.01, 0, 1.21);
+  caja(.18, .6, .92, 0x55646f, 1.01, 0, 1.21);
+  caja(.9, .12, .62, 0x6b7c8b, -.46, .42, 1.33);
+  caja(.9, .12, .62, 0x6b7c8b, .46, .42, 1.33);
+  // mesa de centro
+  caja(1.1, .05, .6, 0x8b6a4c, 0, .35, 2.25);
+  caja(.9, .35, .4, 0x2f3134, 0, 0, 2.25);
+  // isla de cocina
+  caja(.9, .86, 2.0, 0xf2f1ee, 2.3, 0, -.3);
+  caja(1.0, .04, 2.1, 0x2f3134, 2.3, .86, -.3);
+  // taburetes
+  [-.85, -.1, .55].forEach(z => {
+    caja(.36, .05, .36, 0x8b6a4c, 1.65, .62, z);
+    caja(.04, .62, .04, 0x2b2b2b, 1.65, 0, z);
+  });
+  // lámparas colgantes sobre la isla
+  [-.8, .2].forEach(z => {
+    const cable = new THREE.Mesh(new THREE.CylinderGeometry(.006, .006, .9, 6), new THREE.MeshBasicMaterial({ color: 0x222222 }));
+    cable.position.set(2.3, PISO + H - .45, z); escena.add(cable);
+    const pantalla = new THREE.Mesh(new THREE.ConeGeometry(.16, .22, 24, 1, true), new THREE.MeshLambertMaterial({ color: 0x1f2a33, side: THREE.DoubleSide }));
+    pantalla.position.set(2.3, PISO + H - .98, z); escena.add(pantalla);
+    const foco = new THREE.Mesh(new THREE.SphereGeometry(.05, 12, 8), new THREE.MeshBasicMaterial({ color: 0xfff3d6 }));
+    foco.position.set(2.3, PISO + H - 1.06, z); escena.add(foco);
+  });
+  // planta junto al ventanal
+  const maceta = new THREE.Mesh(new THREE.CylinderGeometry(.22, .17, .45, 20), new THREE.MeshLambertMaterial({ color: 0xe8e4dc }));
+  maceta.position.set(-2.9, PISO + .225, -2.5); escena.add(maceta);
+  [[0, .9, 0, .32], [.12, 1.15, .05, .24], [-.1, 1.2, -.06, .22], [.03, 1.42, 0, .18]].forEach(([dx, hy, dz, r]) => {
+    const hoja = new THREE.Mesh(new THREE.IcosahedronGeometry(r, 1), new THREE.MeshLambertMaterial({ color: 0x4f7d45, flatShading: true }));
+    hoja.position.set(-2.9 + dx, PISO + hy, -2.5 + dz); escena.add(hoja);
+  });
+
+  // ---------- nadir con el logo (tapa del trípode) ----------
+  const nadirTex = (() => {
+    const c = document.createElement('canvas'); c.width = c.height = 512;
+    const g = c.getContext('2d');
+    g.fillStyle = '#ffffff'; g.beginPath(); g.arc(256, 256, 250, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = '#0067b8'; g.lineWidth = 10; g.beginPath(); g.arc(256, 256, 232, 0, Math.PI * 2); g.stroke();
+    g.fillStyle = '#0067b8'; g.font = '600 150px "Segoe UI", "Open Sans", Arial, sans-serif';
+    g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('K', 256, 226);
+    g.fillStyle = '#262626'; g.font = '600 44px "Segoe UI", "Open Sans", Arial, sans-serif';
+    g.fillText('KRAFTOR', 256, 340);
+    g.fillStyle = '#616161'; g.font = '400 32px "Segoe UI", "Open Sans", Arial, sans-serif';
+    g.fillText('tours 360°', 256, 388);
+    return new THREE.CanvasTexture(c);
+  })();
+  const nadir = new THREE.Mesh(new THREE.CircleGeometry(.32, 48), new THREE.MeshBasicMaterial({ map: nadirTex, transparent: true }));
+  nadir.rotation.x = -Math.PI / 2; nadir.position.set(0, PISO + .01, 0); escena.add(nadir);
+
+  // ---------- puntos de interés ----------
+  const puntos = [
+    { p: [.4, .35, -2.9], t: 'Ventanal de piso a techo', d: 'Orientación norte, vista al parque. Luz natural todo el día.', med: 'Ancho 3.20 m · Alto 2.25 m', icono: 'info' },
+    { p: [2.3, PISO + 1.05, -.3], t: 'Cocina abierta con isla', d: 'Tablero de cuarzo, campana y refrigeradora empotradas.', med: 'Isla 2.00 × 0.90 m', icono: 'info' },
+    { p: [-3.5, PISO + 1.3, 1.55], t: 'Ir al dormitorio principal', d: 'En el tour completo este punto te lleva a la siguiente escena.', med: 'Escena 2 de 6', icono: 'ir' },
+    { p: [0, PISO + .95, 1.2], t: 'Sala', d: 'Espacio para sofá de tres cuerpos y mesa de centro.', med: '4.20 × 3.60 m · 15.1 m²', icono: 'info' }
+  ];
+  const ICONOS = {
+    info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 11v7"/><circle cx="12" cy="6.5" r="1.6" fill="currentColor" stroke="none"/></svg>',
+    ir: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6M6 11l6-6 6 6"/></svg>'
+  };
+  const ficha = document.createElement('div'); ficha.className = 'ficha-hs'; ficha.hidden = true; capa.appendChild(ficha);
+  let abierto = null;
+  puntos.forEach((pt, i) => {
+    pt.v = new THREE.Vector3(...pt.p);
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'hotspot'; b.innerHTML = ICONOS[pt.icono];
+    b.setAttribute('aria-label', pt.t);
+    b.addEventListener('pointerdown', e => e.stopPropagation());
+    b.addEventListener('click', e => { e.stopPropagation(); abierto = abierto === i ? null : i; quieto(); dibujar(); });
+    capa.appendChild(b); pt.el = b;
+  });
+
+  // ---------- control de la mirada ----------
+  let lon = 0, lat = -6, fov = 75, auto = !reducir, ultimaInter = 0;
+  let w = 1, h = 1;
+  function medir() {
+    w = visor.clientWidth || 1; h = visor.clientHeight || 1;
+    renderer.setSize(w, h, false);
+    camara.aspect = w / h;
+    // en pantallas angostas abrimos un poco el campo de visión
+    camara.fov = fov * (camara.aspect < 1 ? 1.15 : 1);
+    camara.updateProjectionMatrix();
+  }
+  const objetivo = new THREE.Vector3();
+  const tmp = new THREE.Vector3();
+  function dibujar() {
+    lat = Math.max(-85, Math.min(80, lat));
+    const fi = THREE.MathUtils.degToRad(90 - lat), te = THREE.MathUtils.degToRad(lon);
+    objetivo.set(Math.sin(fi) * Math.sin(te), Math.cos(fi), -Math.sin(fi) * Math.cos(te)).add(camara.position);
+    camara.lookAt(objetivo);
+    renderer.render(escena, camara);
+    // ubicar los puntos sobre la imagen
+    puntos.forEach((pt, i) => {
+      tmp.copy(pt.v).applyMatrix4(camara.matrixWorldInverse);
+      if (tmp.z > -0.1) { pt.el.hidden = true; if (abierto === i) ficha.hidden = true; return; }
+      tmp.copy(pt.v).project(camara);
+      const sx = (tmp.x + 1) / 2 * w, sy = (1 - tmp.y) / 2 * h;
+      const fuera = sx < -20 || sx > w + 20 || sy < -20 || sy > h + 20;
+      pt.el.hidden = fuera;
+      pt.el.style.transform = `translate(${sx}px, ${sy}px)`;
+      if (abierto === i && !fuera) {
+        ficha.innerHTML = `<strong>${pt.t}</strong><span>${pt.d}</span><span class="medida">${pt.med}</span>`;
+        ficha.hidden = false;
+        const fx = Math.min(Math.max(sx + 24, 8), w - 248), fy = Math.min(Math.max(sy - 40, 8), h - ficha.offsetHeight - 8);
+        ficha.style.transform = `translate(${fx}px, ${fy}px)`;
+      }
+    });
+    if (abierto === null) ficha.hidden = true;
+  }
+  function quieto() { auto = false; ultimaInter = performance.now(); pista.classList.add('oculta'); }
+
+  let arrastre = null;
+  visor.addEventListener('pointerdown', e => {
+    arrastre = { x: e.clientX, y: e.clientY, lon, lat, id: e.pointerId };
+    visor.setPointerCapture(e.pointerId); visor.classList.add('arrastrando'); quieto();
+    abierto = null;
+  });
+  visor.addEventListener('pointermove', e => {
+    if (!arrastre || e.pointerId !== arrastre.id) return;
+    const k = camara.fov / h;
+    lon = arrastre.lon - (e.clientX - arrastre.x) * k;
+    lat = arrastre.lat + (e.clientY - arrastre.y) * k;
+    dibujar();
+  });
+  const soltar = () => { arrastre = null; visor.classList.remove('arrastrando'); ultimaInter = performance.now(); };
+  visor.addEventListener('pointerup', soltar);
+  visor.addEventListener('pointercancel', soltar);
+  visor.addEventListener('keydown', e => {
+    const paso = { ArrowLeft: [-6, 0], ArrowRight: [6, 0], ArrowUp: [0, 5], ArrowDown: [0, -5] }[e.key];
+    if (!paso) return;
+    e.preventDefault(); quieto(); lon += paso[0]; lat += paso[1]; dibujar();
+  });
+  function zoom(d) { fov = Math.max(40, Math.min(90, fov + d)); quieto(); medir(); dibujar(); }
+  document.getElementById('zoomMas').addEventListener('click', () => zoom(-10));
+  document.getElementById('zoomMenos').addEventListener('click', () => zoom(10));
+  document.getElementById('pantalla').addEventListener('click', () => {
+    const el = visor.parentElement;
+    try {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+    } catch (e) { /* algunas vistas no permiten pantalla completa */ }
+  });
+  document.addEventListener('fullscreenchange', () => { medir(); dibujar(); });
+
+  new ResizeObserver(() => { medir(); dibujar(); }).observe(visor);
+
+  // giro automático lento hasta que la persona toma el control
+  let visible = true;
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(visor);
+  let antes = performance.now();
+  function bucle(ahora) {
+    const dt = Math.min(ahora - antes, 50); antes = ahora;
+    if (!auto && !reducir && !arrastre && abierto === null && ahora - ultimaInter > 8000) auto = true;
+    if (auto && visible) { lon += dt * .006; dibujar(); }
+    requestAnimationFrame(bucle);
+  }
+  medir(); dibujar();
+  requestAnimationFrame(bucle);
+})();
+
+/* =========================================================
+   COTIZADOR
+   ========================================================= */
+(function () {
+  // m² que cubre una escena según el tipo de espacio
+  const TIPOS = {
+    vivienda: { m2: 14, nombre: 'departamento o casa' },
+    local: { m2: 28, nombre: 'concesionario o tienda' },
+    hotel: { m2: 22, nombre: 'hotel o restaurante' },
+    salud: { m2: 18, nombre: 'clínica o laboratorio' },
+    eventos: { m2: 60, nombre: 'local de eventos' },
+    inst: { m2: 40, nombre: 'industria, colegio u oficina' }
+  };
+  const $ = id => document.getElementById(id);
+  const rango = $('areaRango'), num = $('areaNum');
+  let texto = '';
+
+  function calcular() {
+    const tipo = document.querySelector('input[name="tipo"]:checked').value;
+    const area = Math.max(20, Math.min(20000, parseInt(num.value, 10) || 0));
+    const escenas = Math.max(4, Math.ceil(area / TIPOS[tipo].m2));
+    const horas = Math.max(1, Math.ceil(escenas * 12 / 60));
+    let dias = escenas <= 15 ? 5 : escenas <= 40 ? 7 : 10;
+    const extras = [];
+    if ($('x-plano').checked) extras.push('plano interactivo');
+    if ($('x-maps').checked) { extras.push('publicación en Google Maps'); dias += 2; }
+    if ($('x-video').checked) { extras.push('video para redes'); dias += 1; }
+    const plan = escenas <= 8 && !$('x-plano').checked && !$('x-maps').checked ? 'Esencial' : escenas <= 25 && !$('x-maps').checked ? 'Profesional' : 'Proyecto';
+
+    $('rEscenas').textContent = escenas;
+    $('rHoras').textContent = horas;
+    $('rDias').textContent = dias;
+    $('rPlan').innerHTML = `Te recomendamos el plan <strong>${plan}</strong>.`;
+    texto = `Hola Kraftor, quiero cotizar un tour virtual 360°.\n• Espacio: ${TIPOS[tipo].nombre}, ${area} m²\n• Estimado: ${escenas} escenas, plan ${plan}` + (extras.length ? `\n• Extras: ${extras.join(', ')}` : '');
+    $('rMensaje').textContent = texto;
+    $('rWhats').href = 'https://wa.me/51958317484?text=' + encodeURIComponent(texto);
+  }
+  rango.addEventListener('input', () => { num.value = rango.value; calcular(); });
+  num.addEventListener('input', () => { rango.value = Math.min(3000, Math.max(30, num.value || 30)); calcular(); });
+  $('cotForm').addEventListener('change', calcular);
+  $('cotForm').addEventListener('submit', e => e.preventDefault());
+
+  // los botones de cada plan precargan un caso típico
+  const PRESET = {
+    esencial: ['vivienda', 90, []],
+    profesional: ['hotel', 400, ['x-plano']],
+    proyecto: ['inst', 1500, ['x-plano', 'x-maps']]
+  };
+  document.querySelectorAll('[data-plan]').forEach(a => a.addEventListener('click', () => {
+    const [tipo, area, ext] = PRESET[a.dataset.plan];
+    document.querySelector(`input[name="tipo"][value="${tipo}"]`).checked = true;
+    num.value = rango.value = area;
+    ['x-plano', 'x-maps', 'x-video'].forEach(id => { $(id).checked = ext.includes(id); });
+    calcular();
+  }));
+
+  function copiar(txt, boton, etiqueta) {
+    const ok = () => { boton.textContent = 'Copiado'; setTimeout(() => { boton.textContent = etiqueta; }, 1800); };
+    try {
+      navigator.clipboard.writeText(txt).then(ok, () => seleccionar(boton));
+    } catch (e) { seleccionar(boton); }
+  }
+  function seleccionar(boton) {
+    const destino = boton.closest('.fila')?.querySelector('b') || $('rMensaje');
+    const r = document.createRange(); r.selectNodeContents(destino);
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    boton.textContent = 'Selecciona y copia';
+  }
+  $('rCopiar').addEventListener('click', e => copiar(texto, e.currentTarget, 'Copiar mensaje'));
+  document.querySelectorAll('[data-copiar]').forEach(b => b.addEventListener('click', () => copiar(b.dataset.copiar, b, 'Copiar')));
+
+  calcular();
+})();
+
+/* Volver al principio */
+(function () {
+  const b = document.getElementById('arriba');
+  const ver = () => b.classList.toggle('visible', window.scrollY > 700);
+  addEventListener('scroll', ver, { passive: true }); ver();
+  b.addEventListener('click', () => window.scrollTo({ top: 0 }));
+})();
+</script>
+</body>
+</html>
